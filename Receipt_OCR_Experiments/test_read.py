@@ -63,4 +63,7 @@ Fed to GPT asking for the total and store yielding
 
 GPT Response:
 https://chat.openai.com/share/db74ce3c-448d-4425-afc9-c84319b3875b
+
+Refined:
+https://chat.openai.com/share/3db08b5a-9300-4519-9ec7-497c6ceb54a7
 """
