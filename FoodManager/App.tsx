@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { AddData } from './src/addData';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Welcome to Fridge Manager.exe :D</Text>
+      <AddData />
       <StatusBar style="auto" />
     </View>
   );
