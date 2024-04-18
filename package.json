@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "firebase": "^10.11.0"
+    "@expo/vector-icons": "^13.0.0",
+    "@rneui/base": "^0.0.0-edge.2",
+    "@rneui/themed": "github:react-native-elements/react-native-elements#themed",
+    "firebase": "^10.11.0",
+    "react-native-elements": "^3.4.3",
+    "react-native-vector-icons": "^10.0.3"
   }
 }
