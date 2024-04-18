@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Upload and Encode Image</title>
+</head>
+<body>
+    <input type="file" id="imageInput" accept="image/png, image/jpeg">
+    <button onclick="uploadImage()">Upload Image</button>
+    <div>
+        OCR:
+        <div id="ocr"></div>
+    </div>
+    <div>
+        LLM:
+        <div id="llm">
+
+        </div>
+    </div>
+    <script>
+        function uploadImage() {
+        const input = document.getElementById('imageInput');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function (e) {
+                const base64Image = e.target.result;
+                // Example of posting the base64 image string using fetch API
+                fetch('http://127.0.0.1:5000/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ image: base64Image })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("ocr").textContent = data["ocr"];
+                    document.getElementById("llm").textContent = data["llm"];
+                    console.log(data)
+                })
+                .catch((error) => console.error('Error:', error));
+            };
+            
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            alert('Please select an image file.');
+        }  
+        }
+    </script>
+</body>
+</html>
