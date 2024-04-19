@@ -54,10 +54,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
     ]; 
 
     const [searchText, setSearchText] = React.useState("");
+    const [foodInventory, setFoodInventory] = React.useState(foodList);
 
     const updateSearch = (searchText?: string) => {
       setSearchText(searchText);
     };
+
+    const searchFunction = (searchText?: string) => {
+      const updatedList = foodList.filter((item) => {
+        const item_data = `${item.name.toUpperCase()})`; 
+        const text_data = searchText.toUpperCase(); 
+        return item_data.indexOf(text_data) > -1; 
+      }); 
+      setSearchText(searchText);
+      setFoodInventory(updatedList);
+    }
 
     const onFilterPress = () => {
       console.log('Filter button pressed');
@@ -74,6 +85,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
       //open scanner
     };
 
+    const editItem = (item_id) => {
+
+    };
+
+    const deleteItem = (item_id) => {
+        
+    };
+
 
     const Tab = createBottomTabNavigator();
 
@@ -82,10 +101,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
         <Text>{item.name}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 60 }}>
-          <TouchableOpacity onPress={() => console.log('Edit ' + item.id)}>
+          <TouchableOpacity onPress={() => editItem(item.id)}>
             <Icon name="edit" size={20} color="#000" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => console.log('Delete ' + item.id)}>
+          </TouchableOpacity>)
+          <TouchableOpacity onPress={() => deleteItem(item.id)}>
             <Icon name="trash" size={20} color="#000" />
           </TouchableOpacity>
         </View>
@@ -101,13 +120,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
             <View style = {styles.container}>
               <SearchBar
                 placeholder="Type Here..."
-                onChangeText={updateSearch}
+                onChangeText={searchFunction}
                 value={searchText}
-                 onBlur={undefined} onFocus={undefined} platform={"default"} clearIcon={undefined} searchIcon={undefined} loadingProps={undefined} showLoading={false} onClear={undefined} onCancel={undefined} lightTheme={false} round={false} cancelButtonTitle={""} cancelButtonProps={undefined} showCancel={false}              />
+                 onBlur={undefined} onFocus={undefined} platform={"default"} clearIcon={undefined} searchIcon={undefined} loadingProps={undefined} showLoading={false} onClear={undefined} onCancel={undefined} lightTheme={false} round={false} cancelButtonTitle={""} cancelButtonProps={undefined} showCancel={true}              />
               <Ionicons name="filter" size={50} color="black" onPress={onFilterPress} containerFilter = {styles.filter} />
             </View>
             <FlatList
-              data={foodList}
+              data={foodInventory}
               renderItem={renderItem}
               keyExtractor={item => item.id}
             />  
