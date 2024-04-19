@@ -54,10 +54,6 @@ import { ScannerScreen } from "./ScannerScreen";
         quantity: "1",
         date: "2023-12-31"
       }, 
-      { 
-        id: "6", 
-        title: "CP", 
-      }, 
 
       
     ]; 
@@ -122,14 +118,11 @@ import { ScannerScreen } from "./ScannerScreen";
             </TouchableOpacity>
             <Button title="Red Button" color="red" onPress={onPressedAddFromReceipt} />
           </View>
-          <Tab.Navigator
-      initialRouteName="Feed"
-      screenOptions={{
-        tabBarActiveTintColor: '#e91e63',
-      }}
-    >
+
+    <NavigationContainer>
+      <Tab.Navigator>
       <Tab.Screen
-        name="Feed"
+        name="Home"
         component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
@@ -159,16 +152,17 @@ import { ScannerScreen } from "./ScannerScreen";
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="KitchenWare"
         component={KitchenwareScreen}
         options={{
-          tabBarLabel: 'Profile',
+          tabBarLabel: 'KitchenWare',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="silverware" color={color} size={size} />
           ),
         }}
       />
     </Tab.Navigator>
+    </NavigationContainer>
         </View>
       );
   };
