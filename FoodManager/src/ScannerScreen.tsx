@@ -19,8 +19,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const ScannerScreen = () => (
     <View style={styles.middle}>
-      <Button title="Button 1" />
-      <Button title="Button 2" />
     </View>
   );
 

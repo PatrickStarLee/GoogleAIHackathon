@@ -13,15 +13,10 @@ import {
   import { SearchBar, ListItem } from 'react-native-elements';
   import { Ionicons } from '@expo/vector-icons';
   import Icon from 'react-native-vector-icons/FontAwesome';
-  import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { HomeScreen } from "./HomeScreen";
-import { KitchenwareScreen } from "./KitchenwareScreen";
-import { ProfileScreen } from "./ProfileScreen";
-import { ScannerScreen } from "./ScannerScreen";
 
 
+//implement rest of functionality in this page, e.g. search, filter etc
   const InventoryPage = () => {
     const foodList = [ 
       { 
@@ -75,6 +70,8 @@ import { ScannerScreen } from "./ScannerScreen";
 
     const onPressedAddFromReceipt = () => {
       console.log("an item was pressed from receipt");
+        //open scanner page
+      //open scanner
     };
 
 
@@ -95,16 +92,19 @@ import { ScannerScreen } from "./ScannerScreen";
       </View>
     );
 
+    //make navigation component bottom bar in own file
+    //move it in appdata.tsx
+
     return (
       
         <View style={{ flex: 1, justifyContent: "center" }}>
-            <View style={styles.container}>
+            <View style = {styles.container}>
               <SearchBar
                 placeholder="Type Here..."
                 onChangeText={updateSearch}
                 value={searchText}
-                containerStyle={styles.searchBar} onBlur={undefined} onFocus={undefined} platform={"default"} clearIcon={undefined} searchIcon={undefined} loadingProps={undefined} showLoading={false} onClear={undefined} onCancel={undefined} lightTheme={false} round={false} cancelButtonTitle={""} cancelButtonProps={undefined} showCancel={false}              />
-              <Ionicons name="filter" size={24} color="black" onPress={onFilterPress} />
+                 onBlur={undefined} onFocus={undefined} platform={"default"} clearIcon={undefined} searchIcon={undefined} loadingProps={undefined} showLoading={false} onClear={undefined} onCancel={undefined} lightTheme={false} round={false} cancelButtonTitle={""} cancelButtonProps={undefined} showCancel={false}              />
+              <Ionicons name="filter" size={50} color="black" onPress={onFilterPress} containerFilter = {styles.filter} />
             </View>
             <FlatList
               data={foodList}
@@ -119,50 +119,7 @@ import { ScannerScreen } from "./ScannerScreen";
             <Button title="Red Button" color="red" onPress={onPressedAddFromReceipt} />
           </View>
 
-    <NavigationContainer>
-      <Tab.Navigator>
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Scanner"
-        component={ScannerScreen}
-        options={{
-          tabBarLabel: 'Scan',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="scanner" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          tabBarLabel: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="KitchenWare"
-        component={KitchenwareScreen}
-        options={{
-          tabBarLabel: 'KitchenWare',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="silverware" color={color} size={size} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-    </NavigationContainer>
+
         </View>
       );
   };
@@ -189,17 +146,20 @@ import { ScannerScreen } from "./ScannerScreen";
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: 10,
+      //alignItems: 'center',
+      //padding: 10,
     },
     searchBar: {
       flex: 1,
-      height: 40,
+      height: '50%',
       borderColor: 'gray',
       borderWidth: 1,
       marginRight: 10,
       paddingLeft: 10,
     },
+    filter: {
+      alignItems: 'center'
+    }
   });
 
   export { InventoryPage };
