@@ -16,23 +16,15 @@ import {
   import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation } from '@react-navigation/native';
 
-const KitchenwareScreen = () => {
 
-  return(
-    <View style={styles.middle}>
-      <Button title="Button 1" />
-      <Button title="Button 2" />
-    </View>
-  )
-};
+const AddFoodFromReceiptPage = () => {
+    return(
+        <View>
 
-  const styles = StyleSheet.create({
-    middle: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  });
+        </View>
+    );
+}
 
-  export {KitchenwareScreen};
+export {AddFoodFromReceiptPage};

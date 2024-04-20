@@ -25,19 +25,32 @@ import { ProfileScreen } from "./src/ProfileScreen";
 import { ScannerScreen } from "./src/ScannerScreen";
 import { BottomBar } from './src/BottomBar';
 import { Dimensions } from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { AddFoodFromReceiptPage } from './src/AddFoodFromReceiptPage';
+import { FindRecipesPage } from './src/FindRecipesPage';
 
 
 
 export default function App() {
 
   const Tab = createBottomTabNavigator();
+  const Stack = createNativeStackNavigator()
 
   return (
     <View style = {styles.container}>
       {/*<AddData /> */}
      {/*} <InventoryPage /> */}
      {/*} <StatusBar style="auto" /> */}
-     <BottomBar/>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Scanner" component={ScannerScreen} />
+          <Stack.Screen name="InventoryPage" component={InventoryPage} />
+          <Stack.Screen name="FindRecipesPage" component={FindRecipesPage} />
+          <Stack.Screen name="AddFoodFromReceiptPage" component={AddFoodFromReceiptPage} />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <BottomBar/>
 
     </View>
   );

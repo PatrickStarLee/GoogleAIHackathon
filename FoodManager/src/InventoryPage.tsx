@@ -95,18 +95,19 @@ import Modal from "react-native-modal";
     };
 
     const editItem = (item_id) => {
-      const foundItem = foodInventory.find(food => food.id === item_id);
+      const foundIndex = foodInventory.findIndex(food => food.id === item_id);
 
+      toggleModal();
+
+      foodInventory[foundIndex].name = foodName;
+      foodInventory[foundIndex].quantity = quantity;
+      foodInventory[foundIndex].date = expirationDate;
     };
 
     const deleteItem = (item_id) => {
-      const updatedList = foodInventory.filter(foodItem => foodItem.id === item_id);
+      const updatedList = foodInventory.filter(foodItem => foodItem.id !== item_id);
       setFoodInventory(updatedList);
     };
-
-
-    const Tab = createBottomTabNavigator();
-
 
     const renderItem = ({ item }) => (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>

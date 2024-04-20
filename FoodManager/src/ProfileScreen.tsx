@@ -17,12 +17,17 @@ import {
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ProfileScreen = () => (
-    <View style={styles.middle}>
-      <Button title="Button 1" />
-      <Button title="Button 2" />
+const ProfileScreen = () => {
+
+
+    return (
+      <View style={styles.middle}>
+        <Text> Profile Page </Text>
+        <Button title="Button 1" />
+        <Button title="Button 2" />
     </View>
-  );
+    );
+  };
 
   const styles = StyleSheet.create({
     middle: {
