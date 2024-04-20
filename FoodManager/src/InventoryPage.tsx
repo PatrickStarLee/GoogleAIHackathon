@@ -14,6 +14,7 @@ import {
   import { Ionicons } from '@expo/vector-icons';
   import Icon from 'react-native-vector-icons/FontAwesome';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Modal from "react-native-modal";
 
 
 //implement rest of functionality in this page, e.g. search, filter etc
@@ -55,13 +56,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
     const [searchText, setSearchText] = React.useState("");
     const [foodInventory, setFoodInventory] = React.useState(foodList);
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [expirationDate, setExpirationDate] = useState("");
+    const [foodName, setFoodName] = useState("");
+    const [quantity, setQuantity] = useState("");
+
+    const toggleModal = () => {
+      setModalVisible(!isModalVisible);
+    };
 
     const updateSearch = (searchText?: string) => {
       setSearchText(searchText);
     };
 
     const searchFunction = (searchText?: string) => {
-      const updatedList = foodList.filter((item) => {
+      const updatedList = foodInventory.filter((item) => {
         const item_data = `${item.name.toUpperCase()})`; 
         const text_data = searchText.toUpperCase(); 
         return item_data.indexOf(text_data) > -1; 
@@ -86,11 +95,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
     };
 
     const editItem = (item_id) => {
+      const foundItem = foodInventory.find(food => food.id === item_id);
 
     };
 
     const deleteItem = (item_id) => {
-        
+      const updatedList = foodInventory.filter(foodItem => foodItem.id === item_id);
+      setFoodInventory(updatedList);
     };
 
 
@@ -103,7 +114,35 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 60 }}>
           <TouchableOpacity onPress={() => editItem(item.id)}>
             <Icon name="edit" size={20} color="#000" />
-          </TouchableOpacity>)
+          </TouchableOpacity>
+          <Modal isVisible={isModalVisible}>
+            <View style={{ flex: 1 }}>
+              <View>
+                <TextInput
+                  placeholder = "Enter name of food..."
+                  value={foodName}
+                  onChangeText={setFoodName}
+                >
+                </TextInput>
+                <TextInput
+                  placeholder = "Enter quantity..."
+                  value={quantity}
+                  onChangeText={setQuantity}
+                >
+                </TextInput>
+                <TextInput
+                  placeholder = "Enter expiration date..."
+                  value={expirationDate}
+                  onChangeText={setExpirationDate}
+                >
+                </TextInput>
+              </View>
+              <View> 
+                <Button title="OK" onPress={toggleModal} />
+                <Button title="Cancel" onPress={toggleModal} />
+              </View>
+            </View>
+          </Modal>
           <TouchableOpacity onPress={() => deleteItem(item.id)}>
             <Icon name="trash" size={20} color="#000" />
           </TouchableOpacity>
