@@ -12,7 +12,8 @@ from vertexai.generative_models import GenerativeModel, Part, FinishReason
 import vertexai.preview.generative_models as generative_models
 
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app)
+
 @app.route('/upload', methods=['POST'])
 def upload_image():
     # Step 1: Receive the JSON data
@@ -25,5 +26,9 @@ def upload_image():
     llm_response = a.generate(text)
     return jsonify({'ocr': text, "llm": llm_response})
 
+@app.route('/heartbeat', methods=['GET'])
+def heartbeat():
+    return jsonify({"Status": "Im a real boy"})
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0",debug=True)

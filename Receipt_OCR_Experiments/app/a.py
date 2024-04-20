@@ -31,3 +31,6 @@ def generate(ocr_result):
   for response in responses:
     out.append(response.text)
   return "".join(out)
+
+if __name__ == "__main__":
+  pass
