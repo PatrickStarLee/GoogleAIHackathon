@@ -28,60 +28,11 @@ const BottomBar = () => {
     const Tab = createBottomTabNavigator();
 
     return (
-        <NavigationContainer>
-        <Tab.Navigator>
-        <Tab.Screen
-          name="Inventory"
-          component={InventoryPage}
-          options={{
-            tabBarLabel: 'Inventory',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="scanner" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            tabBarLabel: 'Home',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Scanner"
-          component={ScannerScreen}
-          options={{
-            tabBarLabel: 'Scan',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="scanner" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{
-            tabBarLabel: 'Profile',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="account" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="KitchenWare"
-          component={KitchenwareScreen}
-          options={{
-            tabBarLabel: 'KitchenWare',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="silverware" color={color} size={size} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-      </NavigationContainer>
+      <>
+      <Text> This is the bottom bar</Text>
+
+
+      </>
     );
 };
 

@@ -22,49 +22,27 @@ import { ScannerScreen } from "./ScannerScreen";
 import { FindRecipesPage } from "./FindRecipesPage";
 import { AddFoodFromReceiptPage } from "./AddFoodFromReceiptPage";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { HomeScreen } from "./HomeScreen";
 
-const HomeScreen = ({navigation}) => {
+const HomeNavigation =(navigation) =>
+{
+    const Stack = createNativeStackNavigator();
 
-  return (
+    return (
+
+            <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Scanner" component={ScannerScreen} />
+                <Stack.Screen name="InventoryPage" component={InventoryPage} />
+                <Stack.Screen name="FindRecipesPage" component={FindRecipesPage} />
+                <Stack.Screen name="AddFoodFromReceiptPage" component={AddFoodFromReceiptPage} />
+            </Stack.Navigator>
+
+    );
     
-  
-  <View style={styles.middle}>
-    <Text> Home Screen </Text>
-    <View style={styles.button}>
-      <Button
-        title="Food Inventory"
-        color="blue"
-        onPress={() => navigation.navigate('InventoryPage')}
-      />
-    </View>
-    <View style={styles.button}>
-      <Button
-        title="Add Food From Receipt"
-        color="green"
-        onPress={() => navigation.navigate('AddFoodFromReceiptPage')}
-      />
-    </View>
-    <View style={styles.button}>
-      <Button
-        title="Add Food from Camera"
-        color="red"
-        onPress={() => navigation.navigate('Scanner')}
-      />
-    </View>
-    <View style={styles.button}>
-      <Button
-        title="Find Recipes"
-        color="Yellow"
-        onPress={() => navigation.navigate('FindRecipesPage')}
-      />
-    </View>
-  </View>
-  
- 
-  );
 };
 
-  const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     middle: {
       flex: 1,
       justifyContent: 'center',
@@ -81,4 +59,4 @@ const HomeScreen = ({navigation}) => {
     },
   });
 
-  export {HomeScreen};
+  export {HomeNavigation};

@@ -16,9 +16,11 @@ import {
   import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Camera , useCameraDevices, CameraDevice} from 'react-native-vision-camera';
+//import { Camera , useCameraDevices, CameraDevice} from 'react-native-vision-camera';
 
 const ScannerScreen = () => {
+
+  /*
   const camera = useRef(null);
   const devices = useCameraDevices();
   const [device, setDevice] = useState<CameraDevice | undefined>(devices[devices.length-1]);
@@ -28,15 +30,15 @@ const ScannerScreen = () => {
       const options = { quality: 0.5, base64: true };
       const data = await camera.current.takePictureAsync(options);
       console.log(data.uri);
-    }};
+    }};*/
 
     return (
       <View style={{ flex: 1 }}>
-        <Camera style={{ flex: 1 }} ref={camera} device={device} isActive={true}/>
+      {/* <Camera style={{ flex: 1 }} ref={camera} device={device} isActive={true}/>
         <TouchableOpacity onPress={takePicture} style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
           <Text style={{ fontSize: 14 }}> SNAP </Text>
-        </TouchableOpacity>
-      </View>
+    </TouchableOpacity> */}
+    </View>
     );
 };
 
