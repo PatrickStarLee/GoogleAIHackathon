@@ -54,7 +54,7 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.button}>
       <Button
         title="Find Recipes"
-        color="Yellow"
+        color="black"
         onPress={() => navigation.navigate('FindRecipesPage')}
       />
     </View>
