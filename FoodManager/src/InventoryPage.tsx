@@ -15,6 +15,8 @@ import {
   import Icon from 'react-native-vector-icons/FontAwesome';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
+import { ButtonPage } from "./Button";
+import { ModalPage } from "./Modal";
 
 
 //implement rest of functionality in this page, e.g. search, filter etc
@@ -81,6 +83,7 @@ import Modal from "react-native-modal";
 
     const onFilterPress = () => {
       console.log('Filter button pressed');
+
       
     };
 
@@ -116,34 +119,42 @@ import Modal from "react-native-modal";
           <TouchableOpacity onPress={() => editItem(item.id)}>
             <Icon name="edit" size={20} color="#000" />
           </TouchableOpacity>
-          <Modal isVisible={isModalVisible}>
-            <View style={{ flex: 1 }}>
-              <View>
-                <TextInput
-                  placeholder = "Enter name of food..."
-                  value={foodName}
-                  onChangeText={setFoodName}
-                >
-                </TextInput>
-                <TextInput
-                  placeholder = "Enter quantity..."
-                  value={quantity}
-                  onChangeText={setQuantity}
-                >
-                </TextInput>
-                <TextInput
-                  placeholder = "Enter expiration date..."
-                  value={expirationDate}
-                  onChangeText={setExpirationDate}
-                >
-                </TextInput>
+          <View style={styles.pop_up_container}>
+            <View style={styles.separator} />
+            <Modal isVisible={isModalVisible}>
+            <ModalPage.Container>
+              <View style = {styles.modal}>
+                <ModalPage.Header title="Edit the item in list"/>
+                <ModalPage.Body>
+                  <TextInput
+                    style = {styles.input}
+                    placeholder = "Enter name of food..."
+                    value={foodName}
+                    onChangeText={setFoodName}
+                    />
+                  <TextInput
+                    style = {styles.input}
+                    placeholder = "Enter quantity..."
+                    value={quantity}
+                    onChangeText={setQuantity}
+                  />
+                  <TextInput
+                    style = {styles.input}
+                    placeholder = "Enter expiration date..."
+                    value={expirationDate}
+                    onChangeText={setExpirationDate}
+                  />
+                </ModalPage.Body>
+                <ModalPage.Footer>
+                  <View style = {styles.button}> 
+                    <ButtonPage title="OK" onPress={toggleModal} />
+                    <ButtonPage title="Cancel" onPress={toggleModal} />
+                  </View>
+                </ModalPage.Footer>
               </View>
-              <View> 
-                <Button title="OK" onPress={toggleModal} />
-                <Button title="Cancel" onPress={toggleModal} />
-              </View>
-            </View>
-          </Modal>
+            </ModalPage.Container>
+            </Modal>
+          </View>
           <TouchableOpacity onPress={() => deleteItem(item.id)}>
             <Icon name="trash" size={20} color="#000" />
           </TouchableOpacity>
@@ -184,14 +195,12 @@ import Modal from "react-native-modal";
   };
 
   const styles = StyleSheet.create({
-    button: {
-      width: 30,
-      height: 30,
-      borderRadius: 30,
-      backgroundColor: '#007BFF',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
+  modal: {
+    width: "100%",
+    height: "90%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
     buttonRectangle: {
       width: 200,
       height: 20,
@@ -199,8 +208,9 @@ import Modal from "react-native-modal";
       alignItems: 'center',
     },
     text: {
-      color: '#FFFFFF',
-      fontSize: 36,
+      fontSize: 16,
+      fontWeight: "400",
+      textAlign: "center",
     },
     container: {
       flexDirection: 'row',
@@ -218,7 +228,31 @@ import Modal from "react-native-modal";
     },
     filter: {
       alignItems: 'center'
-    }
+    },
+    button: {
+      flexDirection: "row",
+      flex: 1,
+      justifyContent: "center",
+    },
+    separator: {
+      marginVertical: 30,
+      height: 1,
+      width: "80%",
+    },
+    input: {
+      paddingTop: 10,
+      borderColor: "grey",
+      borderBottomWidth: 2,
+    },
+    pop_up_container: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: "bold",
+    },
   });
 
   export { InventoryPage };
