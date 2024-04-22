@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
     Image,
     Button,
-    FlatList
+    FlatList,
+    Alert,
   } from "react-native";
   import React, { useState } from "react";
   import { SearchBar, ListItem } from 'react-native-elements';
@@ -17,6 +18,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Modal from "react-native-modal";
 import { ButtonPage } from "./Button";
 import { ModalPage } from "./Modal";
+import { RadioButton } from "react-native-paper";
 
 
 //implement rest of functionality in this page, e.g. search, filter etc
@@ -62,10 +64,72 @@ import { ModalPage } from "./Modal";
     const [expirationDate, setExpirationDate] = useState("");
     const [foodName, setFoodName] = useState("");
     const [quantity, setQuantity] = useState("");
+    const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+    const [checked, setChecked] = useState('first');
+
+    const handlePress = (newChecked) => {
+      setChecked(newChecked);
+      switch (newChecked) {
+        case 'first':
+          //Alert.alert('First button checked');
+          foodInventory.sort((a, b) => {
+            const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+            const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+          
+            // names must be equal
+            return 0;
+          });
+          break;
+        case 'second':
+          //Alert.alert('Second button checked');
+          foodInventory.sort((a, b) => {
+            const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+            const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+          
+            // names must be equal
+            return 0;
+          }).reverse();
+          break;
+        case 'third':
+          //Alert.alert('Third button checked');
+          foodInventory.sort((a, b) => parseInt(a.quantity) - parseInt(b.quantity));
+          break;
+        case 'fourth':
+          //Alert.alert('First button checked');
+          foodInventory.sort((a, b) => parseInt(a.quantity) - parseInt(b.quantity)).reverse();
+          break;
+        case 'fifth':
+          //Alert.alert('Second button checked');
+          foodInventory.sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime()));
+          break;
+        case 'sixth':
+          //Alert.alert('Third button checked');
+          foodInventory.sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime())).reverse();
+          break;
+        default:
+          break;
+      }
+    };
 
     const toggleModal = () => {
       setModalVisible(!isModalVisible);
     };
+
+    const toggleFilterModal = () => {
+      setIsFilterModalVisible(isFilterModalVisible);
+    }
 
     const updateSearch = (searchText?: string) => {
       setSearchText(searchText);
@@ -82,9 +146,7 @@ import { ModalPage } from "./Modal";
     }
 
     const onFilterPress = () => {
-      console.log('Filter button pressed');
-
-      
+      console.log('Filter button pressed');   
     };
 
     const onPressedAddItem= () => {
@@ -122,37 +184,37 @@ import { ModalPage } from "./Modal";
           <View style={styles.pop_up_container}>
             <View style={styles.separator} />
             <Modal isVisible={isModalVisible}>
-            <ModalPage.Container>
-              <View style = {styles.modal}>
-                <ModalPage.Header title="Edit the item in list"/>
-                <ModalPage.Body>
-                  <TextInput
-                    style = {styles.input}
-                    placeholder = "Enter name of food..."
-                    value={foodName}
-                    onChangeText={setFoodName}
+              <ModalPage.Container>
+                <View style = {styles.modal}>
+                  <ModalPage.Header title="Edit the item in list"/>
+                  <ModalPage.Body>
+                    <TextInput
+                      style = {styles.input}
+                      placeholder = "Enter name of food..."
+                      value={foodName}
+                      onChangeText={setFoodName}
+                      />
+                    <TextInput
+                      style = {styles.input}
+                      placeholder = "Enter quantity..."
+                      value={quantity}
+                      onChangeText={setQuantity}
                     />
-                  <TextInput
-                    style = {styles.input}
-                    placeholder = "Enter quantity..."
-                    value={quantity}
-                    onChangeText={setQuantity}
-                  />
-                  <TextInput
-                    style = {styles.input}
-                    placeholder = "Enter expiration date..."
-                    value={expirationDate}
-                    onChangeText={setExpirationDate}
-                  />
-                </ModalPage.Body>
-                <ModalPage.Footer>
-                  <View style = {styles.button}> 
-                    <ButtonPage title="OK" onPress={toggleModal} />
-                    <ButtonPage title="Cancel" onPress={toggleModal} />
-                  </View>
-                </ModalPage.Footer>
-              </View>
-            </ModalPage.Container>
+                    <TextInput
+                      style = {styles.input}
+                      placeholder = "Enter expiration date..."
+                      value={expirationDate}
+                      onChangeText={setExpirationDate}
+                    />
+                  </ModalPage.Body>
+                  <ModalPage.Footer>
+                    <View style = {styles.button}> 
+                      <ButtonPage title="OK" onPress={toggleModal} />
+                      <ButtonPage title="Cancel" onPress={toggleModal} />
+                    </View>
+                  </ModalPage.Footer>
+                </View>
+              </ModalPage.Container>
             </Modal>
           </View>
           <TouchableOpacity onPress={() => deleteItem(item.id)}>
@@ -174,7 +236,79 @@ import { ModalPage } from "./Modal";
                 onChangeText={searchFunction}
                 value={searchText}
                  onBlur={undefined} onFocus={undefined} platform={"default"} clearIcon={undefined} searchIcon={undefined} loadingProps={undefined} showLoading={false} onClear={undefined} onCancel={undefined} lightTheme={false} round={false} cancelButtonTitle={""} cancelButtonProps={undefined} showCancel={true}              />
-              <Ionicons name="filter" size={50} color="black" onPress={onFilterPress} containerFilter = {styles.filter} />
+              <Ionicons name="filter" size={50} color="black" onPress={toggleFilterModal} containerFilter = {styles.filter} />
+              <View style={styles.pop_up_container}>
+                <TouchableOpacity onPress={toggleFilterModal}>
+                  <Icon name="md-close" style={styles.closeButton} />
+                </TouchableOpacity>
+              <View style={styles.separator} />
+              <Modal isVisible={isFilterModalVisible}>
+                <ModalPage.Container>
+                  <View style = {styles.modal}>
+                    <ModalPage.Header title="Sort by the following"/>
+                    <ModalPage.Body>
+                      <RadioButton.Group onValueChange={handlePress} value={checked}>
+                        <View style={styles.radioButton}> 
+                          <RadioButton
+                              value="first"
+                              color="#007BFF"
+                          /> 
+                          <Text style={styles.radioLabel}> 
+                              Sort by name, ascending 
+                          </Text> 
+                        </View> 
+                        <View style={styles.radioButton}> 
+                          <RadioButton
+                              value="second"
+                              color="#007BFF"
+                          /> 
+                          <Text style={styles.radioLabel}> 
+                              Sort by name, descending 
+                          </Text> 
+                        </View> 
+                        <View style={styles.radioButton}> 
+                          <RadioButton
+                              value="third"
+                              color="#007BFF"
+                          /> 
+                          <Text style={styles.radioLabel}> 
+                              Sort by quantity, ascending 
+                          </Text> 
+                        </View> 
+                        <View style={styles.radioButton}> 
+                          <RadioButton
+                              value="fourth"
+                              color="#007BFF"
+                          /> 
+                          <Text style={styles.radioLabel}> 
+                              Sort by quantity, descending 
+                          </Text> 
+                        </View> 
+                        <View style={styles.radioButton}> 
+                          <RadioButton
+                              value="fifth"
+                              color="#007BFF"
+                          /> 
+                          <Text style={styles.radioLabel}> 
+                              Sort by expiration date, ascending 
+                          </Text> 
+                        </View> 
+                        <View style={styles.radioButton}> 
+                          <RadioButton
+                              value="sixth"
+                              color="#007BFF"
+                          /> 
+                          <Text style={styles.radioLabel}> 
+                              Sort by expiration date, descending 
+                          </Text> 
+                        </View> 
+ 
+                      </RadioButton.Group>
+                    </ModalPage.Body>
+                  </View>
+                </ModalPage.Container>
+              </Modal>
+            </View>
             </View>
             <FlatList
               data={foodInventory}
@@ -253,6 +387,22 @@ import { ModalPage } from "./Modal";
       fontSize: 20,
       fontWeight: "bold",
     },
+    closeButton: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0
+    },
+    radioButton: { 
+      flexDirection: 'row', 
+      alignItems: 'center', 
+    }, 
+    radioLabel: { 
+      marginLeft: 8, 
+      fontSize: 16, 
+      color: '#333', 
+    }, 
   });
 
   export { InventoryPage };
