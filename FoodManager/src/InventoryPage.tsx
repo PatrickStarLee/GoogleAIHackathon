@@ -72,7 +72,7 @@ import { RadioButton } from "react-native-paper";
       switch (newChecked) {
         case 'first':
           //Alert.alert('First button checked');
-          foodInventory.sort((a, b) => {
+          const updatedList = foodInventory.sort((a, b) => {
             const nameA = a.name.toUpperCase(); // ignore upper and lowercase
             const nameB = b.name.toUpperCase(); // ignore upper and lowercase
             if (nameA < nameB) {
@@ -85,10 +85,11 @@ import { RadioButton } from "react-native-paper";
             // names must be equal
             return 0;
           });
+          setFoodInventory(updatedList);
           break;
         case 'second':
           //Alert.alert('Second button checked');
-          foodInventory.sort((a, b) => {
+            const updatedList2 = foodInventory.sort((a, b) => {
             const nameA = a.name.toUpperCase(); // ignore upper and lowercase
             const nameB = b.name.toUpperCase(); // ignore upper and lowercase
             if (nameA < nameB) {
@@ -101,22 +102,27 @@ import { RadioButton } from "react-native-paper";
             // names must be equal
             return 0;
           }).reverse();
+          setFoodInventory(updatedList2);
           break;
         case 'third':
           //Alert.alert('Third button checked');
-          foodInventory.sort((a, b) => parseInt(a.quantity) - parseInt(b.quantity));
+          const updatedList3 = foodInventory.sort((a, b) => parseInt(a.quantity) - parseInt(b.quantity));
+          setFoodInventory(updatedList3);
           break;
         case 'fourth':
           //Alert.alert('First button checked');
-          foodInventory.sort((a, b) => parseInt(a.quantity) - parseInt(b.quantity)).reverse();
+          const updatedList4 = foodInventory.sort((a, b) => parseInt(a.quantity) - parseInt(b.quantity)).reverse();
+          setFoodInventory(updatedList4);
           break;
         case 'fifth':
           //Alert.alert('Second button checked');
-          foodInventory.sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime()));
+          const updatedList5 = foodInventory.sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime()));
+          setFoodInventory(updatedList5);
           break;
         case 'sixth':
           //Alert.alert('Third button checked');
-          foodInventory.sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime())).reverse();
+          const updatedList6 = foodInventory.sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime())).reverse();
+          setFoodInventory(updatedList6);
           break;
         default:
           break;
