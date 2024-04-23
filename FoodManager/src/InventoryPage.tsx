@@ -19,7 +19,7 @@ import Modal from "react-native-modal";
 import { ButtonPage } from "./Button";
 import { ModalPage } from "./Modal";
 import { RadioButton } from "react-native-paper";
-
+import DatePicker from "react-native-date-picker";
 
 //implement rest of functionality in this page, e.g. search, filter etc
   const InventoryPage = () => {
@@ -66,6 +66,9 @@ import { RadioButton } from "react-native-paper";
     const [quantity, setQuantity] = useState("");
     const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
     const [checked, setChecked] = useState('first');
+    const [errorMessage, setErrorMessage] = useState("");
+    const [foodErrorMessage, setFoodErrorMessage] = useState("");
+    const [date, setDate] = useState(new Date());
 
     const handlePress = (newChecked) => {
       setChecked(newChecked);
@@ -151,6 +154,8 @@ import { RadioButton } from "react-native-paper";
       setFoodInventory(updatedList);
     }
 
+
+    //these 3 functions are left blank in the mean time
     const onFilterPress = () => {
       console.log('Filter button pressed');   
     };
@@ -168,23 +173,54 @@ import { RadioButton } from "react-native-paper";
     const editItem = (item_id) => {
       const foundIndex = foodInventory.findIndex(food => food.id === item_id);
 
-      toggleModal();
+      //toggleModal();
 
-      foodInventory[foundIndex].name = foodName;
-      foodInventory[foundIndex].quantity = quantity;
-      foodInventory[foundIndex].date = expirationDate;
+      if(foodName.trim() === "" || quantity.trim() === "")
+      {
+        Alert.alert("All three fields must be filled out!");
+      }
+      else {
+
+        if(!Number.isInteger(Number(quantity)))
+        {      
+          setErrorMessage("Input must be a number!")
+        }
+        else if(typeof foodName != 'string')
+        {
+          setFoodErrorMessage('Input can only contain alphabetical characters')
+        }
+        else {
+          const formattedFoodName = foodName.charAt(0).toUpperCase() + foodName.slice(1).toLowerCase();
+          foodInventory[foundIndex].name = formattedFoodName;
+          foodInventory[foundIndex].quantity = quantity;
+          foodInventory[foundIndex].date = date.toString();
+
+          setFoodName("");
+          setQuantity("")
+          setDate(null);
+        }
+
+        setModalVisible(false);
+      }
     };
 
     const deleteItem = (item_id) => {
       const updatedList = foodInventory.filter(foodItem => foodItem.id !== item_id);
       setFoodInventory(updatedList);
     };
+  
+    const handleCancel = () => {
+      setFoodName("");
+      setQuantity("")
+      setDate(null);
+      setModalVisible(false);
+    };
 
     const renderItem = ({ item }) => (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
         <Text>{item.name}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 60 }}>
-          <TouchableOpacity onPress={() => editItem(item.id)}>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Icon name="edit" size={20} color="#000" />
           </TouchableOpacity>
           <View style={styles.pop_up_container}>
@@ -200,23 +236,27 @@ import { RadioButton } from "react-native-paper";
                       value={foodName}
                       onChangeText={setFoodName}
                       />
+                      {foodErrorMessage && <Text style={{color: 'red'}}>{foodErrorMessage}</Text>}
                     <TextInput
                       style = {styles.input}
                       placeholder = "Enter quantity..."
                       value={quantity}
                       onChangeText={setQuantity}
+                      keyboardType="numeric"
                     />
-                    <TextInput
+                    {errorMessage && <Text style={{color: 'red'}}>{errorMessage}</Text>}
+                    {/*<TextInput
                       style = {styles.input}
                       placeholder = "Enter expiration date..."
                       value={expirationDate}
                       onChangeText={setExpirationDate}
-                    />
+                    />*/}
+                    <DatePicker date={date} onDateChange={setDate} />
                   </ModalPage.Body>
                   <ModalPage.Footer>
                     <View style = {styles.button}> 
-                      <ButtonPage title="OK" onPress={toggleModal} />
-                      <ButtonPage title="Cancel" onPress={toggleModal} />
+                      <ButtonPage title="OK" onPress={() => editItem(item.id)} />
+                      <ButtonPage title="Cancel" onPress={handleCancel} />
                     </View>
                   </ModalPage.Footer>
                 </View>
@@ -323,10 +363,10 @@ import { RadioButton } from "react-native-paper";
             />  
 
           <View style={styles.container}>
-            <TouchableOpacity style={styles.button} onPress={onPressedAddItem}>
+          {/*}  <TouchableOpacity style={styles.button} onPress={onPressedAddItem}>
               <Text style={styles.text}>+</Text>
             </TouchableOpacity>
-            <Button title="Red Button" color="red" onPress={onPressedAddFromReceipt} />
+    <Button title="Red Button" color="red" onPress={onPressedAddFromReceipt} /> */}
           </View>
 
 
