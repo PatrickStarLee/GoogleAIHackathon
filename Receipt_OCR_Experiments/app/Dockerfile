@@ -14,3 +14,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY server.py .
 COPY a.py .
+
+ENTRYPOINT ["python3","server.py"]
