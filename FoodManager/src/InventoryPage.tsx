@@ -20,6 +20,9 @@ import { ButtonPage } from "./Button";
 import { ModalPage } from "./Modal";
 import { RadioButton } from "react-native-paper";
 import DatePicker from "react-native-date-picker";
+import { CustomRadioButton } from "./RadioButton";
+import { DatePickerInput } from 'react-native-paper-dates';
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 //implement rest of functionality in this page, e.g. search, filter etc
   const InventoryPage = () => {
@@ -69,8 +72,23 @@ import DatePicker from "react-native-date-picker";
     const [errorMessage, setErrorMessage] = useState("");
     const [foodErrorMessage, setFoodErrorMessage] = useState("");
     const [date, setDate] = useState(new Date());
+    const [option, setOption] = useState(null);
+    const [inputDate, setInputDate] = useState(new Date());
+
+
+    const filterData = [
+      { value: 'Sort by name, ascending' },
+      { value: 'Sort by name, descending' },
+      { value: 'Sort by quantity, ascending' },
+      { value: 'Sort by quantity, descending' },
+      { value: 'Sort by expiration date, ascending' },
+      { value: 'Sort by expiration date, descending' },
+    ];
+
+
 
     const handlePress = (newChecked) => {
+      //setChecked(newChecked);
       setChecked(newChecked);
       switch (newChecked) {
         case 'first':
@@ -137,7 +155,7 @@ import DatePicker from "react-native-date-picker";
     };
 
     const toggleFilterModal = () => {
-      setIsFilterModalVisible(isFilterModalVisible);
+      setIsFilterModalVisible(!isFilterModalVisible);
     }
 
     const updateSearch = (searchText?: string) => {
@@ -251,7 +269,17 @@ import DatePicker from "react-native-date-picker";
                       value={expirationDate}
                       onChangeText={setExpirationDate}
                     />*/}
-                    <DatePicker date={date} onDateChange={setDate} />
+                  {/*}  <DatePicker date={date} onDateChange={setDate} /> */}
+                    <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+                      <DatePickerInput
+                        locale="en"
+                        label="Expiration Date"
+                        value={inputDate}
+                        onChange={(d) => setInputDate(d)}
+                        inputMode="start"
+                        mode="outlined"
+                      />
+                  </View> 
                   </ModalPage.Body>
                   <ModalPage.Footer>
                     <View style = {styles.button}> 
@@ -284,12 +312,12 @@ import DatePicker from "react-native-date-picker";
                  onBlur={undefined} onFocus={undefined} platform={"default"} clearIcon={undefined} searchIcon={undefined} loadingProps={undefined} showLoading={false} onClear={undefined} onCancel={undefined} lightTheme={false} round={false} cancelButtonTitle={""} cancelButtonProps={undefined} showCancel={true}              />
               <Ionicons name="filter" size={50} color="black" onPress={toggleFilterModal} containerFilter = {styles.filter} />
               <View style={styles.pop_up_container}>
+              <View style={styles.separator} />
+              <ModalPage isVisible={isFilterModalVisible}>
+                <ModalPage.Container>
                 <TouchableOpacity onPress={toggleFilterModal}>
                   <Icon name="md-close" style={styles.closeButton} />
                 </TouchableOpacity>
-              <View style={styles.separator} />
-              <Modal isVisible={isFilterModalVisible}>
-                <ModalPage.Container>
                   <View style = {styles.modal}>
                     <ModalPage.Header title="Sort by the following"/>
                     <ModalPage.Body>
@@ -349,11 +377,12 @@ import DatePicker from "react-native-date-picker";
                           </Text> 
                         </View> 
  
-                      </RadioButton.Group>
+    </RadioButton.Group> 
+                        {/*<CustomRadioButton data={filterData} onSelect={(value) => handlePress(value)} /> */}
                     </ModalPage.Body>
                   </View>
                 </ModalPage.Container>
-              </Modal>
+              </ModalPage>
             </View>
             </View>
             <FlatList
