@@ -234,9 +234,19 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       setModalVisible(false);
     };
 
+    const Item = ({ name, date, quantity }) => (
+      <View>
+        <Text style={styles.title}>
+          {name}
+        </Text>
+        <Text> Quantity: {quantity} </Text>
+        <Text> Expiration date: {date} </Text>
+      </View>
+    );
+
     const renderItem = ({ item }) => (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-        <Text>{item.name}</Text>
+        <Item name={item.name} quantity={item.quantity} date={item.date} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 60 }}>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Icon name="edit" size={20} color="#000" />
@@ -315,9 +325,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
               <View style={styles.separator} />
               <ModalPage isVisible={isFilterModalVisible}>
                 <ModalPage.Container>
-                <TouchableOpacity onPress={toggleFilterModal}>
-                  <Icon name="md-close" style={styles.closeButton} />
-                </TouchableOpacity>
+                  <TouchableOpacity style={styles.closeButton} onPress={toggleFilterModal}>
+                    <Icon name="close" size={20} color="#333" />
+                  </TouchableOpacity>
                   <View style = {styles.modal}>
                     <ModalPage.Header title="Sort by the following"/>
                     <ModalPage.Body>
@@ -377,7 +387,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                           </Text> 
                         </View> 
  
-    </RadioButton.Group> 
+                      </RadioButton.Group> 
                         {/*<CustomRadioButton data={filterData} onSelect={(value) => handlePress(value)} /> */}
                     </ModalPage.Body>
                   </View>
@@ -462,7 +472,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       fontSize: 20,
       fontWeight: "bold",
     },
-    closeButton: {
+    closeButton2: {
       position: 'absolute',
       left: 0,
       right: 0,
@@ -478,6 +488,17 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       fontSize: 16, 
       color: '#333', 
     }, 
+    closeButton: {
+      alignSelf: "flex-end",
+      marginRight: '2%',
+      marginTop: '2%',
+      backgroundColor: "#ccc",
+      borderRadius: 20,
+      width: '10%',
+      height: '5%',
+      alignItems: "center",
+      justifyContent: "center",
+    },
   });
 
   export { InventoryPage };
