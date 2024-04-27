@@ -10,7 +10,7 @@ import {
     FlatList,
     Alert,
   } from "react-native";
-  import React, { useState } from "react";
+  import React, { useState, useEffect} from "react";
   import { SearchBar, ListItem } from 'react-native-elements';
   import { Ionicons } from '@expo/vector-icons';
   import Icon from 'react-native-vector-icons/FontAwesome';
@@ -61,8 +61,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       
     ]; 
 
-    const [searchText, setSearchText] = React.useState("");
-    const [foodInventory, setFoodInventory] = React.useState(foodList);
+    const [searchText, setSearchText] = useState("");
+    const [foodInventory, setFoodInventory] = useState(foodList);
     const [isModalVisible, setModalVisible] = useState(false);
     const [expirationDate, setExpirationDate] = useState("");
     const [foodName, setFoodName] = useState("");
@@ -74,8 +74,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
     const [date, setDate] = useState(new Date());
     const [option, setOption] = useState(null);
     const [inputDate, setInputDate] = useState(new Date());
-
-
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [isFormValid, setIsFormValid] = useState(false); 
+    const [item_id, setItem_id] = useState("");
+    const [selectedItem, setSelectedItem] = useState(null);
+    
     const filterData = [
       { value: 'Sort by name, ascending' },
       { value: 'Sort by name, descending' },
@@ -84,8 +87,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       { value: 'Sort by expiration date, ascending' },
       { value: 'Sort by expiration date, descending' },
     ];
-
-
 
     const handlePress = (newChecked) => {
       //setChecked(newChecked);
@@ -188,38 +189,62 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       //open scanner
     };
 
-    const editItem = (item_id) => {
+    useEffect(() => {  
+      let newErrors: { [key: string]: string } = {};
+
       const foundIndex = foodInventory.findIndex(food => food.id === item_id);
 
-      //toggleModal();
+      const regex = /^[a-zA-Z]*$/;
 
-      if(foodName.trim() === "" || quantity.trim() === "")
+      //let foodName = selectedItem?.name;
+      //let quantity = selectedItem?.quantity;
+      //let date = selectedItem?.date;
+
+      if(foodName.trim() === "")
       {
-        Alert.alert("All three fields must be filled out!");
+        newErrors.foodName = "The name of the food can't be empty!";
       }
-      else {
-
-        if(!Number.isInteger(Number(quantity)))
-        {      
-          setErrorMessage("Input must be a number!")
-        }
-        else if(typeof foodName != 'string')
-        {
-          setFoodErrorMessage('Input can only contain alphabetical characters')
-        }
-        else {
-          const formattedFoodName = foodName.charAt(0).toUpperCase() + foodName.slice(1).toLowerCase();
-          foodInventory[foundIndex].name = formattedFoodName;
-          foodInventory[foundIndex].quantity = quantity;
-          foodInventory[foundIndex].date = date.toString();
-
-          setFoodName("");
-          setQuantity("")
-          setDate(null);
-        }
-
-        setModalVisible(false);
+      else if(!regex.test(foodName))
+      {
+        newErrors.foodName = 'The name of the food must be a string';
       }
+
+      if(quantity.trim() === "") {
+        newErrors.quantity = "Quantity cannot be blank!";
+      }
+      else if(!Number.isInteger(Number(quantity))) {
+        newErrors.quantity = "Quantity must be a number";
+      }
+
+      //const formattedFoodName = foodName.charAt(0).toUpperCase() + foodName.slice(1).toLowerCase();
+      if (foodInventory[foundIndex]) {
+        foodInventory[foundIndex].name = foodName.charAt(0).toUpperCase() + foodName.slice(1).toLowerCase();
+        foodInventory[foundIndex].quantity = quantity;
+        foodInventory[foundIndex].date = inputDate.toISOString().split('T')[0];
+      }
+
+      setFoodName("");
+      setQuantity("")
+      setInputDate(new Date());
+      //setSelectedItem(null);
+      setErrors(newErrors);
+
+      if (Object.keys(newErrors).length === 0) {
+        alert('Form submitted');
+      }
+      
+  }, [foodName, quantity, date]); 
+
+    const handleSubmit = (item_id) => {
+      setItem_id(item_id);
+
+      if (isFormValid) { 
+        alert('Form submitted successfully!'); 
+    } else { 
+        alert('Form has errors. Please correct them.'); 
+    } 
+
+      setModalVisible(false);
     };
 
     const deleteItem = (item_id) => {
@@ -228,10 +253,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
     };
   
     const handleCancel = () => {
-      setFoodName("");
-      setQuantity("")
-      setDate(null);
       setModalVisible(false);
+    };
+
+    const openEditModal = (item) => {
+      //setSelectedItem(item);
+      setModalVisible(true);
     };
 
     const Item = ({ name, date, quantity }) => (
@@ -243,6 +270,10 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
         <Text> Expiration date: {date} </Text>
       </View>
     );
+
+    const addItemManually = () => {
+      console.log('adding an item here');
+    };
 
     const renderItem = ({ item }) => (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
@@ -264,7 +295,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                       value={foodName}
                       onChangeText={setFoodName}
                       />
-                      {foodErrorMessage && <Text style={{color: 'red'}}>{foodErrorMessage}</Text>}
+                      {errors.foodName && <Text style={{color: 'red'}}>{errors.foodName}</Text>}
                     <TextInput
                       style = {styles.input}
                       placeholder = "Enter quantity..."
@@ -272,7 +303,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                       onChangeText={setQuantity}
                       keyboardType="numeric"
                     />
-                    {errorMessage && <Text style={{color: 'red'}}>{errorMessage}</Text>}
+                    {errors.quantity && <Text style={{color: 'red'}}>{errors.quantity}</Text>}
                     {/*<TextInput
                       style = {styles.input}
                       placeholder = "Enter expiration date..."
@@ -284,16 +315,23 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                       <DatePickerInput
                         locale="en"
                         label="Expiration Date"
-                        value={inputDate}
-                        onChange={(d) => setInputDate(d)}
+                        value={date}
+                        onChange={setDate}
                         inputMode="start"
                         mode="outlined"
                       />
                   </View> 
                   </ModalPage.Body>
                   <ModalPage.Footer>
-                    <View style = {styles.button}> 
-                      <ButtonPage title="OK" onPress={() => editItem(item.id)} />
+                    <View style={styles.button}> 
+                 {/*}   <ButtonPage title="Cancel" onPress={() => handleSubmit(item.id)} /> */}
+                      <TouchableOpacity 
+                        style={[styles.customButton, { opacity: isFormValid ? 1 : 0.5 }]} 
+                        disabled={!isFormValid} 
+                        onPress={() => handleSubmit(item.id)} 
+                      > 
+                        <Text style={styles.customText}>Submit</Text> 
+                      </TouchableOpacity>
                       <ButtonPage title="Cancel" onPress={handleCancel} />
                     </View>
                   </ModalPage.Footer>
@@ -406,6 +444,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
               <Text style={styles.text}>+</Text>
             </TouchableOpacity>
     <Button title="Red Button" color="red" onPress={onPressedAddFromReceipt} /> */}
+        <TouchableOpacity style={styles.addButton} onPress={addItemManually}>
+          <Text style={styles.customText}>Add Food Item</Text>
+        </TouchableOpacity>
           </View>
 
 
@@ -499,6 +540,27 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       alignItems: "center",
       justifyContent: "center",
     },
+    customButton: {
+      backgroundColor: "blue",
+      marginTop: 15,
+      paddingVertical: 15,
+      borderRadius: 25,
+      width: "80%",
+      alignItems: "center",
+    },
+    customText: {
+      color: "white",
+      fontWeight: "700",
+      fontSize: 18,
+    },
+    addButton: {
+      flexDirection: "row",
+      backgroundColor: 'red',
+      width: '70%',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center'
+   }
   });
 
   export { InventoryPage };
