@@ -31,31 +31,31 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
         id: "1", 
         name: "Banana", 
         quantity: "23",
-        date: "2024-02-23"
+        date: "2024-02-23",
       }, 
       { 
         id: "2", 
         name: "Orange", 
         quantity: "12",
-        date: "2024-01-01"
+        date: "2024-01-01",
       }, 
       { 
         id: "3", 
         name: "Ice Cream",
         quantity: "5",
-        date: "2024-03-15" 
+        date: "2024-03-15" ,
       }, 
       { 
         id: "4", 
         name: "Spaghetti",
         quantity: "7",
-        date: "2024-04-01"
+        date: "2024-04-01",
       }, 
       { 
         id: "5", 
         name: "Pineapple", 
         quantity: "1",
-        date: "2023-12-31"
+        date: "2023-12-31",
       }, 
 
       
@@ -64,36 +64,26 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
     const [searchText, setSearchText] = useState("");
     const [foodInventory, setFoodInventory] = useState(foodList);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [expirationDate, setExpirationDate] = useState("");
     const [foodName, setFoodName] = useState("");
     const [quantity, setQuantity] = useState("");
     const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-    const [checked, setChecked] = useState('first');
-    const [errorMessage, setErrorMessage] = useState("");
-    const [foodErrorMessage, setFoodErrorMessage] = useState("");
+    const [checked, setChecked] = useState('first');;
     const [date, setDate] = useState(new Date());
-    const [option, setOption] = useState(null);
     const [inputDate, setInputDate] = useState(new Date());
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [isFormValid, setIsFormValid] = useState(false); 
     const [item_id, setItem_id] = useState("");
-    const [selectedItem, setSelectedItem] = useState(null);
-    
-    const filterData = [
-      { value: 'Sort by name, ascending' },
-      { value: 'Sort by name, descending' },
-      { value: 'Sort by quantity, ascending' },
-      { value: 'Sort by quantity, descending' },
-      { value: 'Sort by expiration date, ascending' },
-      { value: 'Sort by expiration date, descending' },
-    ];
+    const [addFoodName, setAddFoodName] = useState("");
+    const [addQuantity, setAddQuantity] = useState("");
+    const [addInputDate, setAddInputDate] = useState(new Date());
+    const [addErrors, setAddErrors] = useState<{ [key: string]: string }>({});
+    const [isAddModalVisible, setAddModalVisible] = useState(false);
+    const [isAddFormValid, setIsAddFormValid] = useState(false);
 
     const handlePress = (newChecked) => {
-      //setChecked(newChecked);
       setChecked(newChecked);
       switch (newChecked) {
         case 'first':
-          //Alert.alert('First button checked');
           const updatedList = foodInventory.sort((a, b) => {
             const nameA = a.name.toUpperCase(); // ignore upper and lowercase
             const nameB = b.name.toUpperCase(); // ignore upper and lowercase
@@ -104,13 +94,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
               return 1;
             }
           
-            // names must be equal
             return 0;
           });
           setFoodInventory(updatedList);
           break;
         case 'second':
-          //Alert.alert('Second button checked');
             const updatedList2 = foodInventory.sort((a, b) => {
             const nameA = a.name.toUpperCase(); // ignore upper and lowercase
             const nameB = b.name.toUpperCase(); // ignore upper and lowercase
@@ -120,29 +108,24 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
             if (nameA > nameB) {
               return 1;
             }
-          
-            // names must be equal
+
             return 0;
           }).reverse();
           setFoodInventory(updatedList2);
           break;
         case 'third':
-          //Alert.alert('Third button checked');
           const updatedList3 = foodInventory.sort((a, b) => parseInt(a.quantity) - parseInt(b.quantity));
           setFoodInventory(updatedList3);
           break;
         case 'fourth':
-          //Alert.alert('First button checked');
           const updatedList4 = foodInventory.sort((a, b) => parseInt(a.quantity) - parseInt(b.quantity)).reverse();
           setFoodInventory(updatedList4);
           break;
         case 'fifth':
-          //Alert.alert('Second button checked');
           const updatedList5 = foodInventory.sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime()));
           setFoodInventory(updatedList5);
           break;
         case 'sixth':
-          //Alert.alert('Third button checked');
           const updatedList6 = foodInventory.sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime())).reverse();
           setFoodInventory(updatedList6);
           break;
@@ -151,17 +134,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       }
     };
 
-    const toggleModal = () => {
-      setModalVisible(!isModalVisible);
-    };
-
     const toggleFilterModal = () => {
       setIsFilterModalVisible(!isFilterModalVisible);
     }
-
-    const updateSearch = (searchText?: string) => {
-      setSearchText(searchText);
-    };
 
     const searchFunction = (searchText?: string) => {
       const updatedList = foodInventory.filter((item) => {
@@ -173,32 +148,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       setFoodInventory(updatedList);
     }
 
-
-    //these 3 functions are left blank in the mean time
-    const onFilterPress = () => {
-      console.log('Filter button pressed');   
-    };
-
-    const onPressedAddItem= () => {
-      console.log('add button pressed')
-    };
-
-    const onPressedAddFromReceipt = () => {
-      console.log("an item was pressed from receipt");
-        //open scanner page
-      //open scanner
-    };
-
     useEffect(() => {  
       let newErrors: { [key: string]: string } = {};
 
       const foundIndex = foodInventory.findIndex(food => food.id === item_id);
 
       const regex = /^[a-zA-Z]*$/;
-
-      //let foodName = selectedItem?.name;
-      //let quantity = selectedItem?.quantity;
-      //let date = selectedItem?.date;
 
       if(foodName.trim() === "")
       {
@@ -216,7 +171,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
         newErrors.quantity = "Quantity must be a number";
       }
 
-      //const formattedFoodName = foodName.charAt(0).toUpperCase() + foodName.slice(1).toLowerCase();
       if (foodInventory[foundIndex]) {
         foodInventory[foundIndex].name = foodName.charAt(0).toUpperCase() + foodName.slice(1).toLowerCase();
         foodInventory[foundIndex].quantity = quantity;
@@ -226,26 +180,75 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       setFoodName("");
       setQuantity("")
       setInputDate(new Date());
-      //setSelectedItem(null);
       setErrors(newErrors);
 
       if (Object.keys(newErrors).length === 0) {
         alert('Form submitted');
       }
       
-  }, [foodName, quantity, date]); 
+  }, [foodName, quantity, inputDate]); 
 
     const handleSubmit = (item_id) => {
       setItem_id(item_id);
 
       if (isFormValid) { 
         alert('Form submitted successfully!'); 
-    } else { 
+        setModalVisible(false);
+      } else { 
         alert('Form has errors. Please correct them.'); 
-    } 
-
-      setModalVisible(false);
+      } 
     };
+
+    useEffect(() => {  
+      let newErrors: { [key: string]: string } = {};
+
+      const foundIndex = foodInventory.findIndex(food => food.id === item_id);
+
+      const regex = /^[a-zA-Z]*$/;
+
+      if(addFoodName.trim() === "")
+      {
+        newErrors.foodName = "The name of the food can't be empty!";
+      }
+      else if(!regex.test(addFoodName))
+      {
+        newErrors.foodName = 'The name of the food must be a string';
+      }
+
+      if(addQuantity.trim() === "") {
+        newErrors.quantity = "Quantity cannot be blank!";
+      }
+      else if(!Number.isInteger(Number(addQuantity))) {
+        newErrors.quantity = "Quantity must be a number";
+      }
+
+      const updatedList = [...foodList, {
+        id: foodInventory.length.toString(), 
+        name: addFoodName.charAt(0).toUpperCase() + addFoodName.slice(1).toLowerCase(), 
+        quantity: addQuantity,
+        date: addInputDate.toISOString().split('T')[0]
+      }];
+
+      setFoodInventory(updatedList);
+      setAddFoodName("");
+      setAddQuantity("")
+      setAddInputDate(new Date());
+      setAddErrors(newErrors);
+
+      if (Object.keys(newErrors).length === 0) {
+        alert('Form submitted');
+      }
+      
+  }, [addFoodName, addQuantity, addInputDate]); 
+
+    const handleSubmitAddItem = () => {
+      if (isAddFormValid) { 
+        alert('Form submitted successfully!'); 
+        setAddModalVisible(false);
+      } else { 
+        alert('Form has errors. Please correct them.'); 
+      } 
+    }
 
     const deleteItem = (item_id) => {
       const updatedList = foodInventory.filter(foodItem => foodItem.id !== item_id);
@@ -254,11 +257,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
   
     const handleCancel = () => {
       setModalVisible(false);
-    };
-
-    const openEditModal = (item) => {
-      //setSelectedItem(item);
-      setModalVisible(true);
     };
 
     const Item = ({ name, date, quantity }) => (
@@ -272,8 +270,13 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
     );
 
     const addItemManually = () => {
+      setAddModalVisible(true);
       console.log('adding an item here');
     };
+
+    const handleCancelAddItem = () => {
+      setAddModalVisible(false);
+    }
 
     const renderItem = ({ item }) => (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
@@ -284,7 +287,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
           </TouchableOpacity>
           <View style={styles.pop_up_container}>
             <View style={styles.separator} />
-            <Modal isVisible={isModalVisible}>
+            <ModalPage isVisible={isModalVisible}>
               <ModalPage.Container>
                 <View style = {styles.modal}>
                   <ModalPage.Header title="Edit the item in list"/>
@@ -292,31 +295,24 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                     <TextInput
                       style = {styles.input}
                       placeholder = "Enter name of food..."
-                      value={foodName}
+                      value={addFoodName}
                       onChangeText={setFoodName}
                       />
-                      {errors.foodName && <Text style={{color: 'red'}}>{errors.foodName}</Text>}
+                      {errors.foodName && <Text style={{color: 'red'}}>{addErrors.foodName}</Text>}
                     <TextInput
                       style = {styles.input}
                       placeholder = "Enter quantity..."
-                      value={quantity}
-                      onChangeText={setQuantity}
+                      value={addQuantity}
+                      onChangeText={setAddQuantity}
                       keyboardType="numeric"
                     />
-                    {errors.quantity && <Text style={{color: 'red'}}>{errors.quantity}</Text>}
-                    {/*<TextInput
-                      style = {styles.input}
-                      placeholder = "Enter expiration date..."
-                      value={expirationDate}
-                      onChangeText={setExpirationDate}
-                    />*/}
-                  {/*}  <DatePicker date={date} onDateChange={setDate} /> */}
+                    {errors.quantity && <Text style={{color: 'red'}}>{addErrors.quantity}</Text>}
                     <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
                       <DatePickerInput
                         locale="en"
                         label="Expiration Date"
-                        value={date}
-                        onChange={setDate}
+                        value={addInputDate}
+                        onChange={setAddInputDate}
                         inputMode="start"
                         mode="outlined"
                       />
@@ -324,10 +320,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                   </ModalPage.Body>
                   <ModalPage.Footer>
                     <View style={styles.button}> 
-                 {/*}   <ButtonPage title="Cancel" onPress={() => handleSubmit(item.id)} /> */}
                       <TouchableOpacity 
-                        style={[styles.customButton, { opacity: isFormValid ? 1 : 0.5 }]} 
-                        disabled={!isFormValid} 
+                        style={[styles.customButton, { opacity: isAddFormValid ? 1 : 0.5 }]} 
+                        disabled={!isAddFormValid} 
                         onPress={() => handleSubmit(item.id)} 
                       > 
                         <Text style={styles.customText}>Submit</Text> 
@@ -337,7 +332,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                   </ModalPage.Footer>
                 </View>
               </ModalPage.Container>
-            </Modal>
+            </ModalPage>
           </View>
           <TouchableOpacity onPress={() => deleteItem(item.id)}>
             <Icon name="trash" size={20} color="#000" />
@@ -360,78 +355,76 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                  onBlur={undefined} onFocus={undefined} platform={"default"} clearIcon={undefined} searchIcon={undefined} loadingProps={undefined} showLoading={false} onClear={undefined} onCancel={undefined} lightTheme={false} round={false} cancelButtonTitle={""} cancelButtonProps={undefined} showCancel={true}              />
               <Ionicons name="filter" size={50} color="black" onPress={toggleFilterModal} containerFilter = {styles.filter} />
               <View style={styles.pop_up_container}>
-              <View style={styles.separator} />
-              <ModalPage isVisible={isFilterModalVisible}>
-                <ModalPage.Container>
-                  <TouchableOpacity style={styles.closeButton} onPress={toggleFilterModal}>
-                    <Icon name="close" size={20} color="#333" />
-                  </TouchableOpacity>
-                  <View style = {styles.modal}>
-                    <ModalPage.Header title="Sort by the following"/>
-                    <ModalPage.Body>
-                      <RadioButton.Group onValueChange={handlePress} value={checked}>
-                        <View style={styles.radioButton}> 
-                          <RadioButton
-                              value="first"
-                              color="#007BFF"
-                          /> 
-                          <Text style={styles.radioLabel}> 
-                              Sort by name, ascending 
-                          </Text> 
-                        </View> 
-                        <View style={styles.radioButton}> 
-                          <RadioButton
-                              value="second"
-                              color="#007BFF"
-                          /> 
-                          <Text style={styles.radioLabel}> 
-                              Sort by name, descending 
-                          </Text> 
-                        </View> 
-                        <View style={styles.radioButton}> 
-                          <RadioButton
-                              value="third"
-                              color="#007BFF"
-                          /> 
-                          <Text style={styles.radioLabel}> 
-                              Sort by quantity, ascending 
-                          </Text> 
-                        </View> 
-                        <View style={styles.radioButton}> 
-                          <RadioButton
-                              value="fourth"
-                              color="#007BFF"
-                          /> 
-                          <Text style={styles.radioLabel}> 
-                              Sort by quantity, descending 
-                          </Text> 
-                        </View> 
-                        <View style={styles.radioButton}> 
-                          <RadioButton
-                              value="fifth"
-                              color="#007BFF"
-                          /> 
-                          <Text style={styles.radioLabel}> 
-                              Sort by expiration date, ascending 
-                          </Text> 
-                        </View> 
-                        <View style={styles.radioButton}> 
-                          <RadioButton
-                              value="sixth"
-                              color="#007BFF"
-                          /> 
-                          <Text style={styles.radioLabel}> 
-                              Sort by expiration date, descending 
-                          </Text> 
-                        </View> 
- 
-                      </RadioButton.Group> 
-                        {/*<CustomRadioButton data={filterData} onSelect={(value) => handlePress(value)} /> */}
-                    </ModalPage.Body>
-                  </View>
-                </ModalPage.Container>
-              </ModalPage>
-            </View>
+                <View style={styles.separator} />
+                  <ModalPage isVisible={isFilterModalVisible}>
+                    <ModalPage.Container>
+                      <TouchableOpacity style={styles.closeButton} onPress={toggleFilterModal}>
+                        <Icon name="close" size={20} color="#333" />
+                      </TouchableOpacity>
+                      <View style = {styles.modal}>
+                        <ModalPage.Header title="Sort by the following"/>
+                        <ModalPage.Body>
+                          <RadioButton.Group onValueChange={handlePress} value={checked}>
+                            <View style={styles.radioButton}> 
+                              <RadioButton
+                                  value="first"
+                                  color="#007BFF"
+                              /> 
+                              <Text style={styles.radioLabel}> 
+                                  Sort by name, ascending 
+                              </Text> 
+                            </View> 
+                            <View style={styles.radioButton}> 
+                              <RadioButton
+                                  value="second"
+                                  color="#007BFF"
+                              /> 
+                              <Text style={styles.radioLabel}> 
+                                  Sort by name, descending 
+                              </Text> 
+                            </View> 
+                            <View style={styles.radioButton}> 
+                              <RadioButton
+                                  value="third"
+                                  color="#007BFF"
+                              /> 
+                              <Text style={styles.radioLabel}> 
+                                  Sort by quantity, ascending 
+                              </Text> 
+                            </View> 
+                            <View style={styles.radioButton}> 
+                              <RadioButton
+                                  value="fourth"
+                                  color="#007BFF"
+                              /> 
+                              <Text style={styles.radioLabel}> 
+                                  Sort by quantity, descending 
+                              </Text> 
+                            </View> 
+                            <View style={styles.radioButton}> 
+                              <RadioButton
+                                  value="fifth"
+                                  color="#007BFF"
+                              /> 
+                              <Text style={styles.radioLabel}> 
+                                  Sort by expiration date, ascending 
+                              </Text> 
+                            </View> 
+                            <View style={styles.radioButton}> 
+                              <RadioButton
+                                  value="sixth"
+                                  color="#007BFF"
+                              /> 
+                              <Text style={styles.radioLabel}> 
+                                  Sort by expiration date, descending 
+                              </Text> 
+                            </View>    
+                          </RadioButton.Group> 
+                        </ModalPage.Body>
+                      </View>
+                    </ModalPage.Container>
+                  </ModalPage>
+              </View>
             </View>
             <FlatList
               data={foodInventory}
@@ -440,13 +433,58 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
             />  
 
           <View style={styles.container}>
-          {/*}  <TouchableOpacity style={styles.button} onPress={onPressedAddItem}>
-              <Text style={styles.text}>+</Text>
+            <TouchableOpacity style={styles.addButton} onPress={addItemManually}>
+              <Text style={styles.customText}>Add Food Item</Text>
             </TouchableOpacity>
-    <Button title="Red Button" color="red" onPress={onPressedAddFromReceipt} /> */}
-        <TouchableOpacity style={styles.addButton} onPress={addItemManually}>
-          <Text style={styles.customText}>Add Food Item</Text>
-        </TouchableOpacity>
+            <View style={styles.pop_up_container}>
+              <View style={styles.separator} />
+              <ModalPage isVisible={isAddModalVisible}>
+                <ModalPage.Container>
+                  <View style = {styles.modal}>
+                    <ModalPage.Header title="Add an item to the list"/>
+                    <ModalPage.Body>
+                      <TextInput
+                        style = {styles.input}
+                        placeholder = "Enter name of food..."
+                        value={addFoodName}
+                        onChangeText={setAddFoodName}
+                        />
+                        {addErrors.foodName && <Text style={{color: 'red'}}>{addErrors.foodName}</Text>}
+                      <TextInput
+                        style = {styles.input}
+                        placeholder = "Enter quantity..."
+                        value={quantity}
+                        onChangeText={setAddQuantity}
+                        keyboardType="numeric"
+                      />
+                      {addErrors.quantity && <Text style={{color: 'red'}}>{addErrors.quantity}</Text>}
+                      <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+                        <DatePickerInput
+                          locale="en"
+                          label="Expiration Date"
+                          value={date}
+                          onChange={setDate}
+                          inputMode="start"
+                          mode="outlined"
+                        />
+                    </View> 
+                    </ModalPage.Body>
+                    <ModalPage.Footer>
+                      <View style={styles.button}> 
+                        <TouchableOpacity 
+                          style={[styles.customButton, { opacity: isFormValid ? 1 : 0.5 }]} 
+                          disabled={!isFormValid} 
+                          onPress={handleSubmitAddItem} 
+                        > 
+                          <Text style={styles.customText}>Submit</Text> 
+                        </TouchableOpacity>
+                        <ButtonPage title="Cancel" onPress={handleCancelAddItem} />
+                      </View>
+                    </ModalPage.Footer>
+                  </View>
+                </ModalPage.Container>
+              </ModalPage>
+            </View>
           </View>
 
 
@@ -556,7 +594,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
     addButton: {
       flexDirection: "row",
       backgroundColor: 'red',
-      width: '70%',
+      width: '100%',
       height: '100%',
       justifyContent: 'center',
       alignItems: 'center'

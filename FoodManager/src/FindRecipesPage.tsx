@@ -10,7 +10,7 @@ import {
   FlatList,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SearchBar, ListItem } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -25,39 +25,11 @@ import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const FindRecipesPage = () => {
-    const recipesList = [ 
-        { 
-          id: "1", 
-          name: "Mashed Potatoes", 
-          date_added: "2024-02-23"
-        }, 
-        { 
-          id: "2", 
-          name: "Lasagna", 
-          date_added: "2024-01-01"
-        }, 
-        { 
-          id: "3", 
-          name: "Protein Chocolate Brownie",
-          date_added: "2024-03-15" 
-        }, 
-        { 
-          id: "4", 
-          name: "Quadruple Decker Burger",
-          date_added: "2024-04-01"
-        }, 
-        { 
-          id: "5", 
-          name: "Orange Chicken", 
-          date_added: "2023-12-31"
-        }, 
-      ]; 
 
-      const [searchText, setSearchText] = React.useState("");
-      const [recipesInventory, setRecipesInventory] = React.useState(recipesList);
+      const [searchText, setSearchText] = useState("");
       const [isModalVisible, setModalVisible] = useState(false);
       const [expirationDate, setExpirationDate] = useState("");
-      const [recipeName, setRecipeName] = useState("");
+      const [foodName, setFoodName] = useState("");
       const [quantity, setQuantity] = useState("");
       const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
       const [checked, setChecked] = useState('first');
@@ -66,41 +38,134 @@ const FindRecipesPage = () => {
       const [date, setDate] = useState(new Date());
       const [option, setOption] = useState(null);
       const [inputDate, setInputDate] = useState(new Date());
-
-      //Reuse searchbar, edit from list, delete from list code as well as html code
-
-      const Item = ({ name, date, quantity }) => (
-        <View>
-          <Text style={styles.title}>
-            Recipe name: {name}
-          </Text>
-          <Text> Date added: {date} </Text>
-        </View>
-      );
-
-      const deleteItem = (item_id) => {
-        const updatedList = recipesInventory.filter(recipeItem => recipeItem.id !== item_id);
-        setRecipesInventory(updatedList);
+      const [errors, setErrors] = useState<{ [key: string]: string }>({});
+      const [isFormValid, setIsFormValid] = useState(false); 
+      const [item_id, setItem_id] = useState("");
+      const [selectedItem, setSelectedItem] = useState(null);
+      const [addFoodName, setAddFoodName] = useState("");
+      const [addQuantity, setAddQuantity] = useState("");
+      const [addInputDate, setAddInputDate] = useState(new Date());
+      const [addErrors, setAddErrors] = useState<{ [key: string]: string }>({});
+      const [isAddModalVisible, setAddModalVisible] = useState(false);
+      const [isAddFormValid, setIsAddFormValid] = useState(false);
+  
+      const handlePress = (newChecked) => {
+        console.log("handle press is here")
       };
-
-      const handleCancel = () => {
-        setRecipeName("");
-        setQuantity("")
-        setDate(null);
-        setModalVisible(false);
-      };
-
-      const renderItem = ({ item }) => {
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-
-        </View>
+  
+      const toggleFilterModal = () => {
+        setIsFilterModalVisible(!isFilterModalVisible);
+      }
+  
+      const searchFunction = (searchText?: string) => {
+        console.log("search function is here")
       }
 
-    return(
-        <View>
+      const onPressShoppingFilter = () => {
 
-        </View>
-    );
+      }
+
+      const onPressKitchenWareFilter = () => {
+
+      }
+
+      const onPressCookingSkillsFilter = () => {
+
+      }
+  
+      return (
+        
+          <View style={{ flex: 1, justifyContent: "center" }}>
+              <View style = {styles.container}>
+                <SearchBar
+                  placeholder="Type Here..."
+                  onChangeText={searchFunction}
+                  value={searchText}
+                   onBlur={undefined} onFocus={undefined} platform={"default"} clearIcon={undefined} searchIcon={undefined} loadingProps={undefined} showLoading={false} onClear={undefined} onCancel={undefined} lightTheme={false} round={false} cancelButtonTitle={""} cancelButtonProps={undefined} showCancel={true}              />
+              {/*}  <Ionicons name="filter" size={50} color="black" onPress={toggleFilterModal} containerFilter = {styles.filter} /> */}
+                <View style = {styles.button}>
+                  <ButtonPage title="Filter by amount of shopping needed" onPress={onPressShoppingFilter} />
+                  <ButtonPage title="Filter by cooking skills" onPress={onPressCookingSkillsFilter} />
+                  <ButtonPage title="Filter by KitchenWare Required" onPress={onPressKitchenWareFilter} />
+                </View>
+                <View style={styles.pop_up_container}>
+                  <View style={styles.separator} />
+            {/*}        <ModalPage isVisible={isFilterModalVisible}>
+                      <ModalPage.Container>
+                        <TouchableOpacity style={styles.closeButton} onPress={toggleFilterModal}>
+                          <Icon name="close" size={20} color="#333" />
+                        </TouchableOpacity>
+                        <View style = {styles.modal}>
+                          <ModalPage.Header title="Sort by the following"/>
+                          <ModalPage.Body>
+                            <RadioButton.Group onValueChange={handlePress} value={checked}>
+                              <View style={styles.radioButton}> 
+                                <RadioButton
+                                    value="first"
+                                    color="#007BFF"
+                                /> 
+                                <Text style={styles.radioLabel}> 
+                                    Sort by cooking skill, from easiest to hardest
+                                </Text> 
+                              </View> 
+                              <View style={styles.radioButton}> 
+                                <RadioButton
+                                    value="second"
+                                    color="#007BFF"
+                                /> 
+                                <Text style={styles.radioLabel}> 
+                                  Sort by cooking skill, from hardest to easiest
+                                </Text> 
+                              </View> 
+                              <View style={styles.radioButton}> 
+                                <RadioButton
+                                    value="third"
+                                    color="#007BFF"
+                                /> 
+                                <Text style={styles.radioLabel}> 
+                                    Sort by required cooking ware quantity, ascending 
+                                </Text> 
+                              </View> 
+                              <View style={styles.radioButton}> 
+                                <RadioButton
+                                    value="fourth"
+                                    color="#007BFF"
+                                /> 
+                                <Text style={styles.radioLabel}> 
+                                    Sort by required cooking ware quantity, descending 
+                                </Text> 
+                              </View> 
+                              <View style={styles.radioButton}> 
+                                <RadioButton
+                                    value="fifth"
+                                    color="#007BFF"
+                                /> 
+                                <Text style={styles.radioLabel}> 
+                                    Sort by expiration date, ascending 
+                                </Text> 
+                              </View> 
+                              <View style={styles.radioButton}> 
+                                <RadioButton
+                                    value="sixth"
+                                    color="#007BFF"
+                                /> 
+                                <Text style={styles.radioLabel}> 
+                                    Sort by expiration date, descending 
+                                </Text> 
+                              </View> 
+      
+                            </RadioButton.Group> 
+                          </ModalPage.Body>
+                        </View>
+                      </ModalPage.Container>
+                    </ModalPage> */}
+                </View>
+              </View> 
+
+  
+  
+          </View>
+        );
 }
 
 const styles = StyleSheet.create({
@@ -189,6 +254,27 @@ const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
     },
+    customButton: {
+      backgroundColor: "blue",
+      marginTop: 15,
+      paddingVertical: 15,
+      borderRadius: 25,
+      width: "80%",
+      alignItems: "center",
+    },
+    customText: {
+      color: "white",
+      fontWeight: "700",
+      fontSize: 18,
+    },
+    addButton: {
+      flexDirection: "row",
+      backgroundColor: 'red',
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center'
+   }
   });
 
 export {FindRecipesPage};
