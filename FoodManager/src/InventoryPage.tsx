@@ -153,6 +153,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
       const foundIndex = foodInventory.findIndex(food => food.id === item_id);
 
+      console.log("The index here is: " + foundIndex);
+
       const regex = /^[a-zA-Z]*$/;
 
       if(foodName.trim() === "")
@@ -171,28 +173,45 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
         newErrors.quantity = "Quantity must be a number";
       }
 
-      if (foodInventory[foundIndex]) {
-        foodInventory[foundIndex].name = foodName.charAt(0).toUpperCase() + foodName.slice(1).toLowerCase();
-        foodInventory[foundIndex].quantity = quantity;
-        foodInventory[foundIndex].date = inputDate.toISOString().split('T')[0];
-      }
-
-      setFoodName("");
-      setQuantity("")
-      setInputDate(new Date());
-      setErrors(newErrors);
+      const updatedList = foodInventory.map((foodItem) =>
+        {
+          if(Number(foodItem.id)-1 === foundIndex)
+          {
+            console.log("The index is " + foundIndex);
+            const num = Number(foodItem.id)-1;
+            console.log("The food item id is: " + num);
+              return {
+                ...foodItem,
+                name: foodName.charAt(0).toUpperCase() + foodName.slice(1).toLowerCase(),
+                quantity: quantity,
+                date: inputDate.toISOString().split('T')[0]
+              };
+          }
+          console.log(foodItem.name);
+          console.log(foodItem.quantity);
+          console.log(foodItem.date);
+          return foodItem;
+        }
+      )
 
       if (Object.keys(newErrors).length === 0) {
-        alert('Form submitted');
+        setFoodInventory(updatedList);
       }
+
+      setErrors(newErrors); 
+      setIsFormValid(Object.keys(newErrors).length === 0); 
       
-  }, [foodName, quantity, inputDate]); 
+  }, [foodName, quantity, inputDate, item_id]); 
 
     const handleSubmit = (item_id) => {
       setItem_id(item_id);
+      console.log(item_id);
 
       if (isFormValid) { 
         alert('Form submitted successfully!'); 
+        setFoodName("");
+        setQuantity("");
+        setInputDate(new Date());
         setModalVisible(false);
       } else { 
         alert('Form has errors. Please correct them.'); 
@@ -229,21 +248,21 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
         date: addInputDate.toISOString().split('T')[0]
       }];
 
-      setFoodInventory(updatedList);
-      setAddFoodName("");
-      setAddQuantity("")
-      setAddInputDate(new Date());
-      setAddErrors(newErrors);
-
       if (Object.keys(newErrors).length === 0) {
-        alert('Form submitted');
+        setFoodInventory(updatedList);
       }
+
+      setAddErrors(newErrors); 
+      setIsAddFormValid(Object.keys(newErrors).length === 0);
       
   }, [addFoodName, addQuantity, addInputDate]); 
 
     const handleSubmitAddItem = () => {
       if (isAddFormValid) { 
         alert('Form submitted successfully!'); 
+        setAddFoodName("");
+        setAddQuantity("")
+        setAddInputDate(new Date());
         setAddModalVisible(false);
       } else { 
         alert('Form has errors. Please correct them.'); 
@@ -278,6 +297,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       setAddModalVisible(false);
     }
 
+    //this portion is for editing items
     const renderItem = ({ item }) => (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
         <Item name={item.name} quantity={item.quantity} date={item.date} />
@@ -295,15 +315,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                     <TextInput
                       style = {styles.input}
                       placeholder = "Enter name of food..."
-                      value={addFoodName}
+                      value={foodName}
                       onChangeText={setFoodName}
                       />
                       {errors.foodName && <Text style={{color: 'red'}}>{addErrors.foodName}</Text>}
                     <TextInput
                       style = {styles.input}
                       placeholder = "Enter quantity..."
-                      value={addQuantity}
-                      onChangeText={setAddQuantity}
+                      value={quantity}
+                      onChangeText={setQuantity}
                       keyboardType="numeric"
                     />
                     {errors.quantity && <Text style={{color: 'red'}}>{addErrors.quantity}</Text>}
@@ -311,8 +331,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                       <DatePickerInput
                         locale="en"
                         label="Expiration Date"
-                        value={addInputDate}
-                        onChange={setAddInputDate}
+                        value={inputDate}
+                        onChange={setInputDate}
                         inputMode="start"
                         mode="outlined"
                       />
@@ -321,8 +341,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                   <ModalPage.Footer>
                     <View style={styles.button}> 
                       <TouchableOpacity 
-                        style={[styles.customButton, { opacity: isAddFormValid ? 1 : 0.5 }]} 
-                        disabled={!isAddFormValid} 
+                        style={[styles.customButton, { opacity: isFormValid ? 1 : 0.5 }]} 
+                        disabled={!isFormValid} 
                         onPress={() => handleSubmit(item.id)} 
                       > 
                         <Text style={styles.customText}>Submit</Text> 
@@ -453,7 +473,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                       <TextInput
                         style = {styles.input}
                         placeholder = "Enter quantity..."
-                        value={quantity}
+                        value={addQuantity}
                         onChangeText={setAddQuantity}
                         keyboardType="numeric"
                       />
@@ -462,8 +482,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                         <DatePickerInput
                           locale="en"
                           label="Expiration Date"
-                          value={date}
-                          onChange={setDate}
+                          value={addInputDate}
+                          onChange={setAddInputDate}
                           inputMode="start"
                           mode="outlined"
                         />
@@ -472,8 +492,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                     <ModalPage.Footer>
                       <View style={styles.button}> 
                         <TouchableOpacity 
-                          style={[styles.customButton, { opacity: isFormValid ? 1 : 0.5 }]} 
-                          disabled={!isFormValid} 
+                          style={[styles.customButton, { opacity: isAddFormValid ? 1 : 0.5 }]} 
+                          disabled={!isAddFormValid} 
                           onPress={handleSubmitAddItem} 
                         > 
                           <Text style={styles.customText}>Submit</Text> 
