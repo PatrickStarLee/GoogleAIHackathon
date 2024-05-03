@@ -18,12 +18,13 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 25,
     width: "80%",
-    height: "80%",
     alignItems: "center",
   },
   text: {
     color: "white",
     fontWeight: "700",
     fontSize: 18,
+    margin: 10,
+    textAlign: "center"
   },
 });

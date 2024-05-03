@@ -24,6 +24,7 @@ import DatePicker from "react-native-date-picker";
 import { CustomRadioButton } from "./RadioButton";
 import { DatePickerInput } from "react-native-paper-dates";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { color } from "react-native-elements/dist/helpers";
 
 const FindRecipesPage = () => {
   const [searchText, setSearchText] = useState("");
@@ -62,21 +63,27 @@ const FindRecipesPage = () => {
     setSearchText(searchText);
   };
 
-  const onPressShoppingFilter = () => {};
+  const onPressShoppingFilter = () => {
+    console.log("Pressed on Shopping Filter button");
+  };
 
-  const onPressKitchenWareFilter = () => {};
+  const onPressKitchenWareFilter = () => {
+    console.log("Pressed on KitchenWare Filter button");
+  };
 
-  const onPressCookingSkillsFilter = () => {};
+  const onPressCookingSkillsFilter = () => {
+    console.log("Pressed on Cooking Skills Filter button");
+  };
 
   return (
-    <View style={{ flex: 1, alignItems: "center" }}>
-      <View style={styles.container}>
+    <View>
+      <View>
         <SearchBar
           style={styles.searchBar}
           placeholder="Type Here..."
           onChangeText={searchFunction}
           value={searchText}
-          inputContainerStyle={{ width: Dimensions.get("window").width }}
+          inputContainerStyle={{ width: "100%" }}
           onBlur={undefined}
           onFocus={undefined}
           platform={"default"}
@@ -93,14 +100,6 @@ const FindRecipesPage = () => {
           showCancel={false}
         />
         {/*}  <Ionicons name="filter" size={50} color="black" onPress={toggleFilterModal} containerFilter = {styles.filter} /> */}
-        <View style={styles.button}>
-          {/* <ButtonPage
-            title="Filter by amount of shopping needed"
-            onPress={onPressShoppingFilter}
-          /> */}
-          {/*<ButtonPage title="Filter by cooking skills" onPress={onPressCookingSkillsFilter} />*/}
-          {/*<ButtonPage title="Filter by KitchenWare Required" onPress={onPressKitchenWareFilter} />*/}
-        </View>
         <View style={styles.pop_up_container}>
           <View style={styles.separator} />
           {/*}        <ModalPage isVisible={isFilterModalVisible}>
@@ -174,6 +173,20 @@ const FindRecipesPage = () => {
                     </ModalPage> */}
         </View>
       </View>
+      <View style={{flex: 1, flexDirection: "column", alignItems: "center"}}>
+        <ButtonPage
+          title="Filter by amount of shopping needed"
+          onPress={onPressShoppingFilter}
+        />
+        <ButtonPage
+          title="Filter by cooking skills"
+          onPress={onPressCookingSkillsFilter}
+        />
+        <ButtonPage
+          title="Filter by KitchenWare Required"
+          onPress={onPressKitchenWareFilter}
+        />
+      </View>
     </View>
   );
 };
@@ -195,6 +208,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
     textAlign: "center",
+    color: "white",
   },
   container: {
     flexDirection: "row",
@@ -204,17 +218,13 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     flex: 1,
+    alignItems: "center",
     borderWidth: 0,
     marginRight: 10,
     paddingLeft: 10,
   },
   filter: {
     alignItems: "center",
-  },
-  button: {
-    flexDirection: "row",
-    flex: 1,
-    justifyContent: "center",
   },
   separator: {
     marginVertical: 30,
