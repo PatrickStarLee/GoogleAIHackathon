@@ -220,7 +220,6 @@ const InventoryPage = () => {
   }, [foodName, quantity, inputDate, item_id]);
 
   const handleSubmit = () => {
-
     //useEffect logic first -> editing input -> handleSubmit has the item.id from the render, thus never being passed in useEffect as an actual index or id value
     if (isFormValid) {
       setDoc(doc(db, "users", "foodTest"), {
@@ -262,7 +261,7 @@ const InventoryPage = () => {
     }
 
     const updatedList = [
-      ...foodList,
+      ...foodInventory,
       {
         id: foodInventory.length.toString(),
         name:
@@ -296,6 +295,7 @@ const InventoryPage = () => {
         });
 
       console.log("item added succesfully!");
+      console.log();
       setAddFoodName("");
       setAddQuantity("");
       setAddInputDate(new Date());
@@ -431,93 +431,94 @@ const InventoryPage = () => {
   );
 
   return (
-    <View style={{ flex: 1, justifyContent: "center" }}>
-      <View style={styles.container}>
-        <SearchBar
-          placeholder="Type Here..."
-          onChangeText={searchFunction}
-          value={searchText}
-          onBlur={undefined}
-          onFocus={undefined}
-          platform={"default"}
-          clearIcon={undefined}
-          searchIcon={undefined}
-          loadingProps={undefined}
-          showLoading={false}
-          onClear={undefined}
-          onCancel={undefined}
-          lightTheme={false}
-          round={false}
-          cancelButtonTitle={""}
-          cancelButtonProps={undefined}
-          showCancel={true}
-        />
-        <Ionicons
-          name="filter"
-          size={50}
-          color="black"
-          onPress={toggleFilterModal}
-          containerFilter={styles.filter}
-        />
-        <View style={styles.pop_up_container}>
-          <View style={styles.separator} />
-          <ModalPage isVisible={isFilterModalVisible}>
-            <ModalPage.Container>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={toggleFilterModal}
-              >
-                <Icon name="close" size={20} color="#333" />
-              </TouchableOpacity>
-              <View style={styles.modal}>
-                <ModalPage.Header title="Sort by the following" />
-                <ModalPage.Body>
-                  <RadioButton.Group
-                    onValueChange={handlePress}
-                    value={checked}
-                  >
-                    <View style={styles.radioButton}>
-                      <RadioButton value="first" color="#007BFF" />
-                      <Text style={styles.radioLabel}>
-                        Sort by name, ascending
-                      </Text>
-                    </View>
-                    <View style={styles.radioButton}>
-                      <RadioButton value="second" color="#007BFF" />
-                      <Text style={styles.radioLabel}>
-                        Sort by name, descending
-                      </Text>
-                    </View>
-                    <View style={styles.radioButton}>
-                      <RadioButton value="third" color="#007BFF" />
-                      <Text style={styles.radioLabel}>
-                        Sort by quantity, ascending
-                      </Text>
-                    </View>
-                    <View style={styles.radioButton}>
-                      <RadioButton value="fourth" color="#007BFF" />
-                      <Text style={styles.radioLabel}>
-                        Sort by quantity, descending
-                      </Text>
-                    </View>
-                    <View style={styles.radioButton}>
-                      <RadioButton value="fifth" color="#007BFF" />
-                      <Text style={styles.radioLabel}>
-                        Sort by expiration date, ascending
-                      </Text>
-                    </View>
-                    <View style={styles.radioButton}>
-                      <RadioButton value="sixth" color="#007BFF" />
-                      <Text style={styles.radioLabel}>
-                        Sort by expiration date, descending
-                      </Text>
-                    </View>
-                  </RadioButton.Group>
-                </ModalPage.Body>
-              </View>
-            </ModalPage.Container>
-          </ModalPage>
+    <View style={{ justifyContent: "center" }}>
+      <View style={{ flexDirection: "row"}}>
+        <View style={{flex: 4}}>
+          <SearchBar
+            placeholder="Type Here..."
+            onChangeText={searchFunction}
+            value={searchText}
+            inputContainerStyle={{ width: "100%" }}
+            onBlur={undefined}
+            onFocus={undefined}
+            platform={"default"}
+            clearIcon={undefined}
+            searchIcon={undefined}
+            loadingProps={undefined}
+            showLoading={false}
+            onClear={undefined}
+            onCancel={undefined}
+            lightTheme={false}
+            round={false}
+            cancelButtonTitle={""}
+            cancelButtonProps={undefined}
+            showCancel={true}
+          />
         </View>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
+          <Ionicons
+            name="filter"
+            size={50}
+            color="black"
+            onPress={toggleFilterModal}
+          />
+        </View>
+      </View>
+      <View style={styles.pop_up_container}>
+        <View style={styles.separator} />
+        <ModalPage isVisible={isFilterModalVisible}>
+          <ModalPage.Container>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={toggleFilterModal}
+            >
+              <Icon name="close" size={20} color="#333" />
+            </TouchableOpacity>
+            <View style={styles.modal}>
+              <ModalPage.Header title="Sort by the following" />
+              <ModalPage.Body>
+                <RadioButton.Group onValueChange={handlePress} value={checked}>
+                  <View style={styles.radioButton}>
+                    <RadioButton value="first" color="#007BFF" />
+                    <Text style={styles.radioLabel}>
+                      Sort by name, ascending
+                    </Text>
+                  </View>
+                  <View style={styles.radioButton}>
+                    <RadioButton value="second" color="#007BFF" />
+                    <Text style={styles.radioLabel}>
+                      Sort by name, descending
+                    </Text>
+                  </View>
+                  <View style={styles.radioButton}>
+                    <RadioButton value="third" color="#007BFF" />
+                    <Text style={styles.radioLabel}>
+                      Sort by quantity, ascending
+                    </Text>
+                  </View>
+                  <View style={styles.radioButton}>
+                    <RadioButton value="fourth" color="#007BFF" />
+                    <Text style={styles.radioLabel}>
+                      Sort by quantity, descending
+                    </Text>
+                  </View>
+                  <View style={styles.radioButton}>
+                    <RadioButton value="fifth" color="#007BFF" />
+                    <Text style={styles.radioLabel}>
+                      Sort by expiration date, ascending
+                    </Text>
+                  </View>
+                  <View style={styles.radioButton}>
+                    <RadioButton value="sixth" color="#007BFF" />
+                    <Text style={styles.radioLabel}>
+                      Sort by expiration date, descending
+                    </Text>
+                  </View>
+                </RadioButton.Group>
+              </ModalPage.Body>
+            </View>
+          </ModalPage.Container>
+        </ModalPage>
       </View>
       <FlatList
         data={foodInventory}
@@ -622,14 +623,9 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     flex: 1,
-    height: "50%",
-    borderColor: "gray",
-    borderWidth: 1,
+    borderWidth: 0,
     marginRight: 10,
     paddingLeft: 10,
-  },
-  filter: {
-    alignItems: "center",
   },
   button: {
     flexDirection: "row",
