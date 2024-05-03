@@ -62,7 +62,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
     ]; 
 
     const [searchText, setSearchText] = useState("");
-    const [foodInventory, setFoodInventory] = useState(foodList);
+    const [foodInventory, setFoodInventory] = useState(foodList); //foodInventory = foodList
     const [isModalVisible, setModalVisible] = useState(false);
     const [foodName, setFoodName] = useState("");
     const [quantity, setQuantity] = useState("");
@@ -187,12 +187,23 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                 date: inputDate.toISOString().split('T')[0]
               };
           }
-          console.log(foodItem.name);
-          console.log(foodItem.quantity);
-          console.log(foodItem.date);
+          //console.log(foodItem.name);
+          //console.log(foodItem.quantity);
+          //console.log(foodItem.date);
           return foodItem;
         }
       )
+
+      console.log(updatedList);
+
+
+      if(updatedList[foundIndex])
+        {
+          console.log("The food item name that we are editing is " + updatedList[foundIndex].name);
+          console.log("The food item quantity that we are editing is " + updatedList[foundIndex].quantity);
+          console.log("The food item date that we are editing is " + updatedList[foundIndex].date);
+        }
+
 
       if (Object.keys(newErrors).length === 0) {
         setFoodInventory(updatedList);
@@ -203,12 +214,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       
   }, [foodName, quantity, inputDate, item_id]); 
 
-    const handleSubmit = (item_id) => {
-      setItem_id(item_id);
-      console.log(item_id);
-
+    const handleSubmit = () => {
+      //setItem_id(item_id);
+      //console.log("edit button returns the following item id: " + item_id);
+      //useEffect logic first -> editing input -> handleSubmit has the item.id from the render, thus never being passed in useEffect as an actual index or id value
       if (isFormValid) { 
-        alert('Form submitted successfully!'); 
+        console.log("item edited successfully!");
         setFoodName("");
         setQuantity("");
         setInputDate(new Date());
@@ -220,8 +231,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
     useEffect(() => {  
       let newErrors: { [key: string]: string } = {};
-
-      const foundIndex = foodInventory.findIndex(food => food.id === item_id);
 
       const regex = /^[a-zA-Z]*$/;
 
@@ -259,9 +268,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
     const handleSubmitAddItem = () => {
       if (isAddFormValid) { 
-        alert('Form submitted successfully!'); 
+        console.log("item added succesfully!"); 
         setAddFoodName("");
-        setAddQuantity("")
+        setAddQuantity("");
         setAddInputDate(new Date());
         setAddModalVisible(false);
       } else { 
@@ -277,6 +286,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
     const handleCancel = () => {
       setModalVisible(false);
     };
+
+    const editModalPopUpItem = (item_id) =>
+    {
+      setItem_id(item_id);
+      setModalVisible(true);
+    }
 
     const Item = ({ name, date, quantity }) => (
       <View>
@@ -302,7 +317,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
         <Item name={item.name} quantity={item.quantity} date={item.date} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 60 }}>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <TouchableOpacity onPress={() => editModalPopUpItem(item.id)}>
             <Icon name="edit" size={20} color="#000" />
           </TouchableOpacity>
           <View style={styles.pop_up_container}>
@@ -318,7 +333,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                       value={foodName}
                       onChangeText={setFoodName}
                       />
-                      {errors.foodName && <Text style={{color: 'red'}}>{addErrors.foodName}</Text>}
+                      {errors.foodName && <Text style={{color: 'red'}}>{errors.foodName}</Text>}
                     <TextInput
                       style = {styles.input}
                       placeholder = "Enter quantity..."
@@ -326,7 +341,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                       onChangeText={setQuantity}
                       keyboardType="numeric"
                     />
-                    {errors.quantity && <Text style={{color: 'red'}}>{addErrors.quantity}</Text>}
+                    {errors.quantity && <Text style={{color: 'red'}}>{errors.quantity}</Text>}
                     <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
                       <DatePickerInput
                         locale="en"
@@ -343,7 +358,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
                       <TouchableOpacity 
                         style={[styles.customButton, { opacity: isFormValid ? 1 : 0.5 }]} 
                         disabled={!isFormValid} 
-                        onPress={() => handleSubmit(item.id)} 
+                        onPress={handleSubmit} 
                       > 
                         <Text style={styles.customText}>Submit</Text> 
                       </TouchableOpacity>
