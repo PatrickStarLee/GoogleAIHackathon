@@ -99,78 +99,8 @@ const FindRecipesPage = () => {
           cancelButtonProps={undefined}
           showCancel={false}
         />
-        {/*}  <Ionicons name="filter" size={50} color="black" onPress={toggleFilterModal} containerFilter = {styles.filter} /> */}
         <View style={styles.pop_up_container}>
           <View style={styles.separator} />
-          {/*}        <ModalPage isVisible={isFilterModalVisible}>
-                      <ModalPage.Container>
-                        <TouchableOpacity style={styles.closeButton} onPress={toggleFilterModal}>
-                          <Icon name="close" size={20} color="#333" />
-                        </TouchableOpacity>
-                        <View style = {styles.modal}>
-                          <ModalPage.Header title="Sort by the following"/>
-                          <ModalPage.Body>
-                            <RadioButton.Group onValueChange={handlePress} value={checked}>
-                              <View style={styles.radioButton}> 
-                                <RadioButton
-                                    value="first"
-                                    color="#007BFF"
-                                /> 
-                                <Text style={styles.radioLabel}> 
-                                    Sort by cooking skill, from easiest to hardest
-                                </Text> 
-                              </View> 
-                              <View style={styles.radioButton}> 
-                                <RadioButton
-                                    value="second"
-                                    color="#007BFF"
-                                /> 
-                                <Text style={styles.radioLabel}> 
-                                  Sort by cooking skill, from hardest to easiest
-                                </Text> 
-                              </View> 
-                              <View style={styles.radioButton}> 
-                                <RadioButton
-                                    value="third"
-                                    color="#007BFF"
-                                /> 
-                                <Text style={styles.radioLabel}> 
-                                    Sort by required cooking ware quantity, ascending 
-                                </Text> 
-                              </View> 
-                              <View style={styles.radioButton}> 
-                                <RadioButton
-                                    value="fourth"
-                                    color="#007BFF"
-                                /> 
-                                <Text style={styles.radioLabel}> 
-                                    Sort by required cooking ware quantity, descending 
-                                </Text> 
-                              </View> 
-                              <View style={styles.radioButton}> 
-                                <RadioButton
-                                    value="fifth"
-                                    color="#007BFF"
-                                /> 
-                                <Text style={styles.radioLabel}> 
-                                    Sort by expiration date, ascending 
-                                </Text> 
-                              </View> 
-                              <View style={styles.radioButton}> 
-                                <RadioButton
-                                    value="sixth"
-                                    color="#007BFF"
-                                /> 
-                                <Text style={styles.radioLabel}> 
-                                    Sort by expiration date, descending 
-                                </Text> 
-                              </View> 
-      
-                            </RadioButton.Group> 
-                          </ModalPage.Body>
-                        </View>
-                      </ModalPage.Container>
-                    </ModalPage> */}
         </View>
       </View>
       <View style={{flex: 1, flexDirection: "column", alignItems: "center"}}>

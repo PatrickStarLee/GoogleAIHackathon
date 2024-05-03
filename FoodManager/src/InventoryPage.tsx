@@ -11,18 +11,13 @@ import {
   Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { SearchBar, ListItem } from "react-native-elements";
+import { SearchBar } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Modal from "react-native-modal";
 import { ButtonPage } from "./Button";
 import { ModalPage } from "./Modal";
 import { RadioButton } from "react-native-paper";
-import DatePicker from "react-native-date-picker";
-import { CustomRadioButton } from "./RadioButton";
 import { DatePickerInput } from "react-native-paper-dates";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { db } from "../Firebase/config";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -68,7 +63,6 @@ const InventoryPage = () => {
   const [quantity, setQuantity] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [checked, setChecked] = useState("first");
-  const [date, setDate] = useState(new Date());
   const [inputDate, setInputDate] = useState(new Date());
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFormValid, setIsFormValid] = useState(false);
@@ -226,8 +220,7 @@ const InventoryPage = () => {
   }, [foodName, quantity, inputDate, item_id]);
 
   const handleSubmit = () => {
-    //setItem_id(item_id);
-    //console.log("edit button returns the following item id: " + item_id);
+
     //useEffect logic first -> editing input -> handleSubmit has the item.id from the render, thus never being passed in useEffect as an actual index or id value
     if (isFormValid) {
       setDoc(doc(db, "users", "foodTest"), {
@@ -436,9 +429,6 @@ const InventoryPage = () => {
       </View>
     </View>
   );
-
-  //make navigation component bottom bar in own file
-  //move it in appdata.tsx
 
   return (
     <View style={{ flex: 1, justifyContent: "center" }}>
