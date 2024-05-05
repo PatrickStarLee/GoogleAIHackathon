@@ -73,6 +73,7 @@ const InventoryPage = () => {
   const [addErrors, setAddErrors] = useState<{ [key: string]: string }>({});
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [isAddFormValid, setIsAddFormValid] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const handlePress = (newChecked) => {
     setChecked(newChecked);
@@ -222,6 +223,7 @@ const InventoryPage = () => {
   const handleSubmit = () => {
     //useEffect logic first -> editing input -> handleSubmit has the item.id from the render, thus never being passed in useEffect as an actual index or id value
     if (isFormValid) {
+      //setFoodInventory(foodInventory.map(item => item.id === selectedItem.id ? { ...item, name: foodName, date: inputDate.toISOString().split("T")[0] } : item))
       setDoc(doc(db, "users", "foodTest"), {
         foodName: foodName,
         quantity: quantity,
@@ -317,7 +319,8 @@ const InventoryPage = () => {
   };
 
   const editModalPopUpItem = (item_id) => {
-    setItem_id(item_id);
+    setItem_id(item_id.id);
+    //setSelectedItem(item_id)
     setModalVisible(true);
   };
 
@@ -358,71 +361,9 @@ const InventoryPage = () => {
           width: 60,
         }}
       >
-        <TouchableOpacity onPress={() => editModalPopUpItem(item.id)}>
+        <TouchableOpacity onPress={() => editModalPopUpItem(item)}>
           <Icon name="edit" size={20} color="#000" />
         </TouchableOpacity>
-        <View style={styles.pop_up_container}>
-          <View style={styles.separator} />
-          <ModalPage isVisible={isModalVisible}>
-            <ModalPage.Container>
-              <View style={styles.modal}>
-                <ModalPage.Header title="Edit the item in list" />
-                <ModalPage.Body>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Enter name of food..."
-                    value={foodName}
-                    onChangeText={setFoodName}
-                  />
-                  {errors.foodName && (
-                    <Text style={{ color: "red" }}>{errors.foodName}</Text>
-                  )}
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Enter quantity..."
-                    value={quantity}
-                    onChangeText={setQuantity}
-                    keyboardType="numeric"
-                  />
-                  {errors.quantity && (
-                    <Text style={{ color: "red" }}>{errors.quantity}</Text>
-                  )}
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      flex: 1,
-                      alignItems: "center",
-                    }}
-                  >
-                    <DatePickerInput
-                      locale="en"
-                      label="Expiration Date"
-                      value={inputDate}
-                      onChange={setInputDate}
-                      inputMode="start"
-                      mode="outlined"
-                    />
-                  </View>
-                </ModalPage.Body>
-                <ModalPage.Footer>
-                  <View style={styles.button}>
-                    <TouchableOpacity
-                      style={[
-                        styles.customButton,
-                        { opacity: isFormValid ? 1 : 0.5 },
-                      ]}
-                      disabled={!isFormValid}
-                      onPress={handleSubmit}
-                    >
-                      <Text style={styles.customText}>Submit</Text>
-                    </TouchableOpacity>
-                    <ButtonPage title="Cancel" onPress={handleCancel} />
-                  </View>
-                </ModalPage.Footer>
-              </View>
-            </ModalPage.Container>
-          </ModalPage>
-        </View>
         <TouchableOpacity onPress={() => deleteItem(item.id)}>
           <Icon name="trash" size={20} color="#000" />
         </TouchableOpacity>
@@ -586,6 +527,68 @@ const InventoryPage = () => {
                       <Text style={styles.customText}>Submit</Text>
                     </TouchableOpacity>
                     <ButtonPage title="Cancel" onPress={handleCancelAddItem} />
+                  </View>
+                </ModalPage.Footer>
+              </View>
+            </ModalPage.Container>
+          </ModalPage>
+        </View>
+        <View style={styles.pop_up_container}>
+          <View style={styles.separator} />
+          <ModalPage isVisible={isModalVisible}>
+            <ModalPage.Container>
+              <View style={styles.modal}>
+                <ModalPage.Header title="Edit the item in list" />
+                <ModalPage.Body>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter name of food..."
+                    value={foodName}
+                    onChangeText={setFoodName}
+                  />
+                  {errors.foodName && (
+                    <Text style={{ color: "red" }}>{errors.foodName}</Text>
+                  )}
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter quantity..."
+                    value={quantity}
+                    onChangeText={setQuantity}
+                    keyboardType="numeric"
+                  />
+                  {errors.quantity && (
+                    <Text style={{ color: "red" }}>{errors.quantity}</Text>
+                  )}
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      flex: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    <DatePickerInput
+                      locale="en"
+                      label="Expiration Date"
+                      value={inputDate}
+                      onChange={setInputDate}
+                      inputMode="start"
+                      mode="outlined"
+                    />
+                  </View>
+                </ModalPage.Body>
+                <ModalPage.Footer>
+                  <View style={styles.button}>
+                    <TouchableOpacity
+                      style={[
+                        styles.customButton,
+                        { opacity: isFormValid ? 1 : 0.5 },
+                      ]}
+                      disabled={!isFormValid}
+                      onPress={handleSubmit}
+                    >
+                      <Text style={styles.customText}>Submit</Text>
+                    </TouchableOpacity>
+                    <ButtonPage title="Cancel" onPress={handleCancel} />
                   </View>
                 </ModalPage.Footer>
               </View>

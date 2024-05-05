@@ -18,7 +18,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { InventoryPage } from "./InventoryPage";
-import { ScannerScreen } from "./ScannerScreen";
+import { ReceiptImageUpload } from "./ReceiptImageUpload";
 import { FindRecipesPage } from "./FindRecipesPage";
 import { AddFoodFromReceiptPage } from "./AddFoodFromReceiptPage";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -48,7 +48,7 @@ const HomeScreen = ({navigation}) => {
       <Button
         title="Add Food from Camera"
         color="red"
-        onPress={() => navigation.navigate('Scanner')}
+        onPress={() => navigation.navigate('ReceiptImageUpload')}
       />
     </View>
     <View style={styles.button}>

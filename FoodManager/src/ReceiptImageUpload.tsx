@@ -20,7 +20,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 //import { Camera , useCameraDevices, CameraDevice} from 'react-native-vision-camera';
 import * as ImagePicker from 'expo-image-picker';
 
-const ScannerScreen = () => {
+const ReceiptImageUpload= () => {
 
   /*
   const camera = useRef(null);
@@ -74,4 +74,4 @@ const ScannerScreen = () => {
     },
   });
 
-  export {ScannerScreen};
+  export {ReceiptImageUpload};

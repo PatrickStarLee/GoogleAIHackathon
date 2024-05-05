@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { AddData } from './src/addData';
+//import { AddData } from './src/addData';
 import { InventoryPage } from './src/InventoryPage';
 import {
   View,
@@ -22,7 +22,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 //import { HomeScreen } from "./src/HomeScreen";
 import { KitchenwareScreen } from "./src/KitchenwareScreen";
 import { ProfileScreen } from "./src/ProfileScreen";
-import { ScannerScreen } from "./src/ScannerScreen";
+import { ReceiptImageUpload } from './src/ReceiptImageUpload';
 import { BottomBar } from './src/BottomBar';
 import { Dimensions } from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -73,17 +73,17 @@ export default function App() {
           options={{
             tabBarLabel: 'Inventory',
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="scanner" color={color} size={size} />
+              <MaterialCommunityIcons name="food" color={color} size={size} />
             ),
           }}
         />
         <Tab.Screen
           name="Scanner"
-          component={ScannerScreen}
+          component={ReceiptImageUpload}
           options={{
-            tabBarLabel: 'Scan',
+            tabBarLabel: 'Image Upload',
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="scanner" color={color} size={size} />
+              <MaterialCommunityIcons name="upload" color={color} size={size} />
             ),
           }}
         />

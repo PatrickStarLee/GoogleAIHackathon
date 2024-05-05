@@ -18,7 +18,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { InventoryPage } from "./InventoryPage";
-import { ScannerScreen } from "./ScannerScreen";
+import { ReceiptImageUpload } from "./ReceiptImageUpload";
 import { FindRecipesPage } from "./FindRecipesPage";
 import { AddFoodFromReceiptPage } from "./AddFoodFromReceiptPage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -33,7 +33,7 @@ const HomeNavigation = (navigation) => {
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Scanner" component={ScannerScreen} />
+      <Stack.Screen name="ReceiptUploadPage" component={ReceiptImageUpload} />
       <Stack.Screen name="InventoryPage" component={InventoryPage} />
       <Stack.Screen name="FindRecipesPage" component={FindRecipesPage} />
       <Stack.Screen

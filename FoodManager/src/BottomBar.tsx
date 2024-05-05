@@ -20,7 +20,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { HomeScreen } from "./HomeScreen";
 import { KitchenwareScreen } from "./KitchenwareScreen";
 import { ProfileScreen } from "./ProfileScreen";
-import { ScannerScreen } from "./ScannerScreen";
 import { InventoryPage } from './InventoryPage';
 
 const BottomBar = () => {
