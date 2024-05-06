@@ -68,6 +68,7 @@ const KitchenwareScreen = () => {
   const [addErrors, setAddErrors] = useState<{ [key: string]: string }>({});
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [isAddFormValid, setIsAddFormValid] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const handlePress = (newChecked) => {
     setChecked(newChecked);

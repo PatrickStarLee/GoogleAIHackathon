@@ -66,7 +66,6 @@ const InventoryPage = () => {
   const [inputDate, setInputDate] = useState(new Date());
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFormValid, setIsFormValid] = useState(false);
-  const [item_id, setItem_id] = useState("");
   const [addFoodName, setAddFoodName] = useState("");
   const [addQuantity, setAddQuantity] = useState("");
   const [addInputDate, setAddInputDate] = useState(new Date());
@@ -158,7 +157,12 @@ const InventoryPage = () => {
   useEffect(() => {
     let newErrors: { [key: string]: string } = {};
 
-    const foundIndex = foodInventory.findIndex((food) => food.id === item_id);
+    let foundIndex = -1;
+    if (selectedItem) {
+      console.log("The selected item is: " + selectedItem);
+      foundIndex = foodInventory.findIndex((food) => food.id === selectedItem.id);
+      console.log("Within this if statement, the value of foundIndex is: " + foundIndex);
+    }
 
     console.log("The index here is: " + foundIndex);
 
@@ -176,54 +180,14 @@ const InventoryPage = () => {
       newErrors.quantity = "Quantity must be a number";
     }
 
-    const updatedList = foodInventory.map((foodItem) => {
-      if (Number(foodItem.id) - 1 === foundIndex) {
-        console.log("The index is " + foundIndex);
-        const num = Number(foodItem.id) - 1;
-        console.log("The food item id is: " + num);
-        return {
-          ...foodItem,
-          name:
-            foodName.charAt(0).toUpperCase() + foodName.slice(1).toLowerCase(),
-          quantity: quantity,
-          date: inputDate.toISOString().split("T")[0],
-        };
-      }
-      //console.log(foodItem.name);
-      //console.log(foodItem.quantity);
-      //console.log(foodItem.date);
-      return foodItem;
-    });
-
-    //console.log(updatedList);
-
-    if (updatedList[foundIndex]) {
-      console.log(
-        "The food item name that we are editing is " +
-          updatedList[foundIndex].name
-      );
-      console.log(
-        "The food item quantity that we are editing is " +
-          updatedList[foundIndex].quantity
-      );
-      console.log(
-        "The food item date that we are editing is " +
-          updatedList[foundIndex].date
-      );
-    }
-
-    if (Object.keys(newErrors).length === 0) {
-      setFoodInventory(updatedList);
-    }
-
     setErrors(newErrors);
     setIsFormValid(Object.keys(newErrors).length === 0);
-  }, [foodName, quantity, inputDate, item_id]);
+  }, [foodName, quantity, inputDate, selectedItem]);
 
   const handleSubmit = () => {
     //useEffect logic first -> editing input -> handleSubmit has the item.id from the render, thus never being passed in useEffect as an actual index or id value
     if (isFormValid) {
-      //setFoodInventory(foodInventory.map(item => item.id === selectedItem.id ? { ...item, name: foodName, date: inputDate.toISOString().split("T")[0] } : item))
+      setFoodInventory(foodInventory.map(item => item.id === selectedItem.id ? { ...item, name: foodName, quantity: quantity, date: inputDate.toISOString().split("T")[0] } : item))
       setDoc(doc(db, "users", "foodTest"), {
         foodName: foodName,
         quantity: quantity,
@@ -262,28 +226,14 @@ const InventoryPage = () => {
       newErrors.quantity = "Quantity must be a number";
     }
 
-    const updatedList = [
-      ...foodInventory,
-      {
-        id: foodInventory.length.toString(),
-        name:
-          addFoodName.charAt(0).toUpperCase() +
-          addFoodName.slice(1).toLowerCase(),
-        quantity: addQuantity,
-        date: addInputDate.toISOString().split("T")[0],
-      },
-    ];
-
-    if (Object.keys(newErrors).length === 0) {
-      setFoodInventory(updatedList);
-    }
-
     setAddErrors(newErrors);
     setIsAddFormValid(Object.keys(newErrors).length === 0);
   }, [addFoodName, addQuantity, addInputDate]);
 
   const handleSubmitAddItem = () => {
     if (isAddFormValid) {
+      const newFoodItem = {id: foodInventory.length.toString(), name: addFoodName, quantity: addQuantity, date: addInputDate.toISOString().split("T")[0] };
+      setFoodInventory([...foodInventory, newFoodItem ])
       setDoc(doc(db, "users", "foodTest"), {
         foodName: addFoodName,
         quantity: addQuantity,
@@ -307,9 +257,9 @@ const InventoryPage = () => {
     }
   };
 
-  const deleteItem = (item_id) => {
+  const deleteItem = (selectedItem) => {
     const updatedList = foodInventory.filter(
-      (foodItem) => foodItem.id !== item_id
+      (foodItem) => foodItem.id !== selectedItem
     );
     setFoodInventory(updatedList);
   };
@@ -318,9 +268,11 @@ const InventoryPage = () => {
     setModalVisible(false);
   };
 
-  const editModalPopUpItem = (item_id) => {
-    setItem_id(item_id.id);
-    //setSelectedItem(item_id)
+  const editModalPopUpItem = (selectedItem) => {
+    setSelectedItem(selectedItem);
+    setFoodName(foodName);
+    setQuantity(quantity);
+    setInputDate(inputDate);
     setModalVisible(true);
   };
 
@@ -333,6 +285,9 @@ const InventoryPage = () => {
   );
 
   const addItemManually = () => {
+    setAddFoodName(addFoodName);
+    setAddQuantity(addQuantity);
+    setAddInputDate(addInputDate);
     setAddModalVisible(true);
     console.log("adding an item here");
   };
