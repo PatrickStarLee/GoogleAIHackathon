@@ -54,14 +54,13 @@ const KitchenwareScreen = () => {
   const [searchText, setSearchText] = useState("");
   const [kitchenWareInventory, setKitchenWareInventory] = useState(kitchenWareList); //kitchenWareInventory = foodList
   const [isModalVisible, setModalVisible] = useState(false);
-  const [kitchenWareItemName, setkitchenWareItemName] = useState("");
+  const [kitchenWareItemName, setKitchenWareItemName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [checked, setChecked] = useState("first");
   const [inputDate, setInputDate] = useState(new Date());
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFormValid, setIsFormValid] = useState(false);
-  const [item_id, setItem_id] = useState("");
   const [addKitchenWareItemName, setAddKitchenWareItemName] = useState("");
   const [addQuantity, setAddQuantity] = useState("");
   const [addInputDate, setAddInputDate] = useState(new Date());
@@ -139,7 +138,12 @@ const KitchenwareScreen = () => {
   useEffect(() => {
     let newErrors: { [key: string]: string } = {};
 
-    const foundIndex = kitchenWareInventory.findIndex((food) => food.id === item_id);
+    let foundIndex = -1;
+    if (selectedItem) {
+      console.log("The selected item is: " + selectedItem);
+      foundIndex = kitchenWareInventory.findIndex((food) => food.id === selectedItem.id);
+      console.log("Within this if statement, the value of foundIndex is: " + foundIndex);
+    }
 
     console.log("The index here is: " + foundIndex);
 
@@ -157,48 +161,14 @@ const KitchenwareScreen = () => {
       newErrors.quantity = "Quantity must be a number";
     }
 
-    const updatedList = kitchenWareInventory.map((kitchenWareItem) => {
-      if (Number(kitchenWareItem.id) - 1 === foundIndex) {
-        console.log("The index is " + foundIndex);
-        const num = Number(kitchenWareItem.id) - 1;
-        console.log("The food item id is: " + num);
-        return {
-          ...kitchenWareItem,
-          name:
-            kitchenWareItemName.charAt(0).toUpperCase() + kitchenWareItemName.slice(1).toLowerCase(),
-          quantity: quantity,
-        };
-      }
-      //console.log(kitchenWareItem.name);
-      //console.log(kitchenWareItem.quantity);
-      //console.log(kitchenWareItem.date);
-      return kitchenWareItem;
-    });
-
-    //console.log(updatedList);
-
-    if (updatedList[foundIndex]) {
-      console.log(
-        "The food item name that we are editing is " +
-          updatedList[foundIndex].name
-      );
-      console.log(
-        "The food item quantity that we are editing is " +
-          updatedList[foundIndex].quantity
-      );
-    }
-
-    if (Object.keys(newErrors).length === 0) {
-      setKitchenWareInventory(updatedList);
-    }
-
     setErrors(newErrors);
     setIsFormValid(Object.keys(newErrors).length === 0);
-  }, [kitchenWareItemName, quantity, inputDate, item_id]);
+  }, [kitchenWareItemName, quantity, inputDate, selectedItem]);
 
   const handleSubmit = () => {
     //useEffect logic first -> editing input -> handleSubmit has the item.id from the render, thus never being passed in useEffect as an actual index or id value
     if (isFormValid) {
+      setKitchenWareInventory(kitchenWareInventory.map(item => item.id === selectedItem.id ? { ...item, name: kitchenWareItemName, quantity: quantity } : item))
       setDoc(doc(db, "users", "foodTest"), {
         kitchenWareItemName: kitchenWareItemName,
         quantity: quantity,
@@ -210,7 +180,7 @@ const KitchenwareScreen = () => {
           console.log(error);
         });
       console.log("item edited successfully!");
-      setkitchenWareItemName("");
+      setKitchenWareItemName("");
       setQuantity("");
       setModalVisible(false);
     } else {
@@ -235,27 +205,14 @@ const KitchenwareScreen = () => {
       newErrors.quantity = "Quantity must be a number";
     }
 
-    const updatedList = [
-      ...kitchenWareInventory,
-      {
-        id: kitchenWareInventory.length.toString(),
-        name:
-          addKitchenWareItemName.charAt(0).toUpperCase() +
-          addKitchenWareItemName.slice(1).toLowerCase(),
-        quantity: addQuantity,
-      },
-    ];
-
-    if (Object.keys(newErrors).length === 0) {
-      setKitchenWareInventory(updatedList);
-    }
-
     setAddErrors(newErrors);
     setIsAddFormValid(Object.keys(newErrors).length === 0);
   }, [addKitchenWareItemName, addQuantity, addInputDate]);
 
   const handleSubmitAddItem = () => {
     if (isAddFormValid) {
+      const newKitchenWareItem = {id: kitchenWareInventory.length.toString(), name: addKitchenWareItemName, quantity: addQuantity };
+      setKitchenWareInventory([...kitchenWareInventory, newKitchenWareItem ]);
       setDoc(doc(db, "users", "foodTest"), {
         kitchenWareItemName: addKitchenWareItemName,
         quantity: addQuantity,
@@ -280,7 +237,7 @@ const KitchenwareScreen = () => {
 
   const deleteItem = (item_id) => {
     const updatedList = kitchenWareInventory.filter(
-      (kitchenWareItem) => kitchenWareItem.id !== item_id
+      (kitchenWareItem) => kitchenWareItem.id !==  item_id
     );
     setKitchenWareInventory(updatedList);
   };
@@ -289,12 +246,14 @@ const KitchenwareScreen = () => {
     setModalVisible(false);
   };
 
-  const editModalPopUpItem = (item_id) => {
-    setItem_id(item_id);
+  const editModalPopUpItem = (selectedItem) => {
+    setSelectedItem(selectedItem);
+    setKitchenWareItemName(kitchenWareItemName);
+    setQuantity(quantity);
     setModalVisible(true);
   };
 
-  const Item = ({ name, date, quantity }) => (
+  const Item = ({ name, quantity }) => (
     <View>
       <Text style={styles.title}>{name}</Text>
       <Text> Quantity: {quantity} </Text>
@@ -303,6 +262,8 @@ const KitchenwareScreen = () => {
 
   const addItemManually = () => {
     setAddModalVisible(true);
+    setKitchenWareItemName(kitchenWareItemName);
+    setQuantity(quantity);
     console.log("adding an item here");
   };
 
@@ -321,7 +282,7 @@ const KitchenwareScreen = () => {
         borderBottomColor: "#ccc",
       }}
     >
-      <Item name={item.name} quantity={item.quantity} date={item.date} />
+      <Item name={item.name} quantity={item.quantity} />
       <View
         style={{
           flexDirection: "row",
@@ -484,7 +445,7 @@ const KitchenwareScreen = () => {
                     style={styles.input}
                     placeholder="Enter name of food..."
                     value={kitchenWareItemName}
-                    onChangeText={setkitchenWareItemName}
+                    onChangeText={setKitchenWareItemName}
                   />
                   {errors.kitchenWareItemName && (
                     <Text style={{ color: "red" }}>{errors.kitchenWareItemName}</Text>

@@ -257,9 +257,9 @@ const InventoryPage = () => {
     }
   };
 
-  const deleteItem = (selectedItem) => {
+  const deleteItem = (item_id) => {
     const updatedList = foodInventory.filter(
-      (foodItem) => foodItem.id !== selectedItem
+      (foodItem) => foodItem.id !== item_id
     );
     setFoodInventory(updatedList);
   };
