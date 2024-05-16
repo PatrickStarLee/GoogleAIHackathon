@@ -31,33 +31,37 @@ const HomeScreen = ({navigation}) => {
   <View style={styles.middle}>
     <Text> Home Screen </Text>
     <View style={styles.button}>
-      <Button
-        title="Food Inventory"
-        color="blue"
+      <Pressable 
+        style={{backgroundColor: 'blue', padding: 10, alignItems: 'center'}}
         onPress={() => navigation.navigate('InventoryPage')}
-      />
+      >
+        <Text style={{color: 'white'}}>Food Inventory</Text>
+      </Pressable>
     </View>
     <View style={styles.button}>
-      <Button
-        title="Add Food From Receipt"
-        color="green"
+      <Pressable 
+        style={{backgroundColor: 'green', padding: 10, alignItems: 'center'}}
         onPress={() => navigation.navigate('AddFoodFromReceiptPage')}
-      />
+      >
+        <Text style={{color: 'white'}}>Add Food From Receipt</Text>
+      </Pressable>
     </View>
     <View style={styles.button}>
-      <Button
-        title="Add Food from Camera"
-        color="red"
+      <Pressable 
+        style={{backgroundColor: 'red', padding: 10, alignItems: 'center'}}
         onPress={() => navigation.navigate('ReceiptImageUpload')}
-      />
+      >
+        <Text style={{color: 'white'}}>Upload an image to add food</Text>
+      </Pressable>
     </View>
     <View style={styles.button}>
-      <Button
-        title="Find Recipes"
-        color="black"
-        onPress={() => navigation.navigate('FindRecipesPage')}
-      />
     </View>
+      <Pressable 
+        style={{backgroundColor: 'black', padding: 10, alignItems: 'center'}}
+        onPress={() => navigation.navigate('FindRecipesPage')}
+      >
+        <Text style={{color: 'white'}}>Find Recipes</Text>
+      </Pressable>
   </View>
   
  

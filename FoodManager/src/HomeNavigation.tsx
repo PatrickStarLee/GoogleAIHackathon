@@ -23,24 +23,66 @@ import { FindRecipesPage } from "./FindRecipesPage";
 import { AddFoodFromReceiptPage } from "./AddFoodFromReceiptPage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen } from "./HomeScreen";
+import { ProfileScreen } from "./ProfileScreen";
+import { KitchenwareScreen } from "./KitchenwareScreen";
 
 const HomeNavigation = (navigation) => {
   const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
 
   return (
-    <Stack.Navigator
-      initialRouteName="Home"
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="ReceiptUploadPage" component={ReceiptImageUpload} />
-      <Stack.Screen name="InventoryPage" component={InventoryPage} />
-      <Stack.Screen name="FindRecipesPage" component={FindRecipesPage} />
-      <Stack.Screen
-        name="AddFoodFromReceiptPage"
-        component={AddFoodFromReceiptPage}
-      />
-    </Stack.Navigator>
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
+       <Tab.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            options={{
+              tabBarLabel: 'Home',
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="home" color={color} size={size} />
+              ),
+            }}
+          />
+        <Tab.Screen
+            name="InventoryPage"
+            component={InventoryPage}
+            options={{
+              tabBarLabel: 'Inventory',
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="food" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Scanner"
+            component={ReceiptImageUpload}
+            options={{
+              tabBarLabel: 'Image Upload',
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="upload" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{
+              tabBarLabel: 'Profile',
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="account" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="KitchenWare"
+            component={KitchenwareScreen}
+            options={{
+              tabBarLabel: 'KitchenWare',
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="silverware" color={color} size={size} />
+              ),
+            }}
+          />
+    </Tab.Navigator>
   );
 };
 
