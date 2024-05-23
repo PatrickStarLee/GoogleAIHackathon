@@ -25,10 +25,11 @@ import { ProfileScreen } from "./src/ProfileScreen";
 import { ReceiptImageUpload } from './src/ReceiptImageUpload';
 import { Dimensions } from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { AddFoodFromReceiptPage } from './src/AddFoodFromReceiptPage';
 import { FindRecipesPage } from './src/FindRecipesPage';
-import { HomeNavigation } from './src/HomeNavigation';
+import { HomeNavigation } from './src/BottomBarNavigation';
 import { HomeScreen } from './src/HomeScreen';
+import { CreateAndEditRecipes } from './src/CreateAndEditRecipes';
+import { CompareRecipes } from "./src/CompareRecipes";
 
 
 
@@ -44,12 +45,10 @@ export default function App() {
     switch (routeName) {
       case 'Home':
         return 'Home';
-      case 'InventoryPage':
-        return 'Inventory';
-      case 'ReceiptImageUpload':
-        return 'Image Upload';
-      case 'AddFoodFromReceiptPage':
-        return 'Add Food';
+      case 'CreateAndEditRecipes':
+        return 'Create And Edit Recipes';
+      case 'CompareRecipes':
+        return 'Compare Recipes';
       case 'FindRecipesPage':
         return 'Find Recipes';
     }
@@ -66,10 +65,9 @@ export default function App() {
               headerTitle: getTabBarLabel(route)
             })}
           />
-          <Stack.Screen name="ReceiptImageUpload" component={ReceiptImageUpload} />
-          <Stack.Screen name="InventoryPage" component={InventoryPage} />
+          <Stack.Screen name="CreateAndEditRecipes" component={CreateAndEditRecipes} />
+          <Stack.Screen name="CompareRecipes" component={CompareRecipes} />
           <Stack.Screen name="FindRecipesPage" component={FindRecipesPage} />
-          <Stack.Screen name="AddFoodFromReceiptPage" component={AddFoodFromReceiptPage}/>
         </Stack.Navigator>
       </NavigationContainer>
     </View>

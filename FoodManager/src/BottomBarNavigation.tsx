@@ -20,11 +20,12 @@ import { useNavigation } from "@react-navigation/native";
 import { InventoryPage } from "./InventoryPage";
 import { ReceiptImageUpload } from "./ReceiptImageUpload";
 import { FindRecipesPage } from "./FindRecipesPage";
-import { AddFoodFromReceiptPage } from "./AddFoodFromReceiptPage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HomeScreen } from "./HomeScreen";
 import { ProfileScreen } from "./ProfileScreen";
 import { KitchenwareScreen } from "./KitchenwareScreen";
+import { CreateAndEditRecipes } from "./CreateAndEditRecipes";
+import { CompareRecipes } from "./CompareRecipes";
 
 const HomeNavigation = (navigation) => {
   const Stack = createNativeStackNavigator();

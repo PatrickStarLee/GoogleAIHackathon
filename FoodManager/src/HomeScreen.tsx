@@ -19,8 +19,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useNavigation } from '@react-navigation/native';
 import { InventoryPage } from "./InventoryPage";
 import { ReceiptImageUpload } from "./ReceiptImageUpload";
+import { CreateAndEditRecipes } from "./CreateAndEditRecipes";
+import { CompareRecipes } from "./CompareRecipes";
 import { FindRecipesPage } from "./FindRecipesPage";
-import { AddFoodFromReceiptPage } from "./AddFoodFromReceiptPage";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const HomeScreen = ({navigation}) => {
@@ -33,25 +34,17 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.button}>
       <Pressable 
         style={{backgroundColor: 'blue', padding: 10, alignItems: 'center'}}
-        onPress={() => navigation.navigate('InventoryPage')}
+        onPress={() => navigation.navigate('CreateAndEditRecipes')}
       >
-        <Text style={{color: 'white'}}>Food Inventory</Text>
+        <Text style={{color: 'white'}}>Create and Edit Recipes</Text>
       </Pressable>
     </View>
     <View style={styles.button}>
       <Pressable 
         style={{backgroundColor: 'green', padding: 10, alignItems: 'center'}}
-        onPress={() => navigation.navigate('AddFoodFromReceiptPage')}
+        onPress={() => navigation.navigate('CompareRecipes')}
       >
-        <Text style={{color: 'white'}}>Add Food From Receipt</Text>
-      </Pressable>
-    </View>
-    <View style={styles.button}>
-      <Pressable 
-        style={{backgroundColor: 'red', padding: 10, alignItems: 'center'}}
-        onPress={() => navigation.navigate('ReceiptImageUpload')}
-      >
-        <Text style={{color: 'white'}}>Upload an image to add food</Text>
+        <Text style={{color: 'white'}}>Compare Recipes</Text>
       </Pressable>
     </View>
     <View style={styles.button}>
