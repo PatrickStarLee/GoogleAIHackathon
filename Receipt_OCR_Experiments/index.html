@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1 id="server-status">Trying to ping server</h1>
+    <h1 id="file-upload-status"></h1>
     <input type="file" id="imageInput" accept="image/png, image/jpeg">
     <button onclick="uploadImage()">Upload Image</button>
     <div>
@@ -20,7 +21,7 @@
     </div>
     <script>
         setInterval(function(){
-            fetch('http://googleaihackathon-346y5xs74q-wl.a.run.app/heartbeat/', {
+            fetch('http://googleaihackathon-346y5xs74q-wl.a.run.app/heartbeat', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -35,7 +36,7 @@
                     document.getElementById("server-status").innerText = "Server is up";
                 })
                 .catch(error => {
-                    document.getElementById("server-status").innerText = "Server is starting";
+                    document.getElementById("server-status").innerText = "Server is starting (Ping failed)";
                 })
         },500)
 
@@ -45,9 +46,10 @@
             const reader = new FileReader();
             
             reader.onload = function (e) {
+                document.getElementById("file-upload-status").innerText = "Uploading ...";
                 const base64Image = e.target.result;
                 // Example of posting the base64 image string using fetch API
-                fetch('http://googleaihackathon-346y5xs74q-wl.a.run.app/upload/', {
+                fetch('http://googleaihackathon-346y5xs74q-wl.a.run.app/upload', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -56,11 +58,15 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    document.getElementById("file-upload-status").innerText = "Succesfully uploaded to server and got response";
                     document.getElementById("ocr").textContent = data["ocr"];
                     document.getElementById("llm").textContent = data["llm"];
                     console.log(data)
                 })
-                .catch((error) => console.error('Error:', error));
+                .catch((error) => {
+                    console.error('Error:', error)
+                    document.getElementById("file-upload-status").innerText = "Failed to upload to server";
+                });
             };
             
             reader.readAsDataURL(input.files[0]);
