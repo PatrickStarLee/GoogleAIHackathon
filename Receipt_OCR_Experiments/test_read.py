@@ -7,7 +7,7 @@ def extract_fields(image_path):
     image = Image.open(image_path)
 
     # Perform OCR on the image
-    text = pytesseract.image_to_string(image)
+    text = pytesseract.image_to_string(image, config="-l eng --psm 3")
 
     return text
 
@@ -66,4 +66,6 @@ https://chat.openai.com/share/db74ce3c-448d-4425-afc9-c84319b3875b
 
 Refined:
 https://chat.openai.com/share/3db08b5a-9300-4519-9ec7-497c6ceb54a7
+
+With Target Example: https://chat.openai.com/share/a43add9e-d6e0-4b56-880f-b98b655019ae
 """
