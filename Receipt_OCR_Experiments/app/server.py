@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from PIL import Image
 import io
 import base64
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import pytesseract
 import os
 import a
@@ -15,6 +15,7 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route('/upload', methods=['POST'])
+@cross_origin()
 def upload_image():
     # Step 1: Receive the JSON data
     data = request.get_json()
@@ -27,6 +28,7 @@ def upload_image():
     return jsonify({'ocr': text, "llm": llm_response})
 
 @app.route('/heartbeat', methods=['GET'])
+@cross_origin()
 def heartbeat():
     return jsonify({"Status": "Im a real boy"})
 
