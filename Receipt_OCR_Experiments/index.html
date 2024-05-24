@@ -5,7 +5,7 @@
 <title>Upload and Encode Image</title>
 </head>
 <body>
-    <h1 id="server-status">Server is Starting</h1>
+    <h1 id="server-status">Trying to ping server</h1>
     <input type="file" id="imageInput" accept="image/png, image/jpeg">
     <button onclick="uploadImage()">Upload Image</button>
     <div>
@@ -20,12 +20,15 @@
     </div>
     <script>
         setInterval(function(){
-            fetch('http://googleaihackathon-346y5xs74q-wl.a.run.app/heartbeat', {
+            fetch('http://googleaihackathon-346y5xs74q-wl.a.run.app/heartbeat/', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                     
+                })
+                .catch(response => {
+                    document.getElementById("server-status").innerText = "Trying to ping server";
                 })
                 .then(response => response.json())
                 .then(response => {
@@ -44,7 +47,7 @@
             reader.onload = function (e) {
                 const base64Image = e.target.result;
                 // Example of posting the base64 image string using fetch API
-                fetch('http://googleaihackathon-346y5xs74q-wl.a.run.app/upload', {
+                fetch('http://googleaihackathon-346y5xs74q-wl.a.run.app/upload/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
