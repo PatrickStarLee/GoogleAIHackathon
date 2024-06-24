@@ -25,6 +25,7 @@ import { FindRecipesPage } from "./FindRecipesPage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../Firebase/config"
+import { UserContext } from "./contexts/UserContext"
 
 
 const HomeScreen = ({ navigation }) => {
@@ -33,49 +34,51 @@ const HomeScreen = ({ navigation }) => {
   const handleGoogle = async (e) => {
     const provider = await new GoogleAuthProvider();
     const user_credentials = await signInWithPopup(auth, provider);
-    setUserData(user_credentials);
+    setUserData(user_credentials.user);
     //console.log("XOXO",user_credentials);
   }
 
   return (
-    <View style={styles.middle}>
-      <Text> Home Screen </Text>
-      <View style={styles.button}>
+    <UserContext.Provider value={userData || "0"}>
+      <View style={styles.middle}>
+        <Text> Home Screen </Text>
+        <View style={styles.button}>
+          <Pressable
+            style={{ backgroundColor: "red", padding: 10, alignItems: "center" }}
+            onPress={handleGoogle}
+          >
+            <Text style={{ color: "white" }}>Google Sign In</Text>
+          </Pressable>
+        </View>
+        <View style={styles.button}>
+          <Pressable
+            style={{ backgroundColor: "blue", padding: 10, alignItems: "center" }}
+            onPress={() => navigation.navigate("CreateAndEditRecipes")}
+          >
+            <Text style={{ color: "white" }}>Create and Edit Recipes</Text>
+          </Pressable>
+        </View>
+        <View style={styles.button}>
+          <Pressable
+            style={{
+              backgroundColor: "green",
+              padding: 10,
+              alignItems: "center",
+            }}
+            onPress={() => navigation.navigate("CompareRecipes")}
+          >
+            <Text style={{ color: "white" }}>Compare Recipes</Text>
+          </Pressable>
+        </View>
+        <View style={styles.button}></View>
         <Pressable
-          style={{ backgroundColor: "red", padding: 10, alignItems: "center" }}
-          onPress={handleGoogle}
+          style={{ backgroundColor: "black", padding: 10, alignItems: "center" }}
+          onPress={() => navigation.navigate("FindRecipesPage")}
         >
-          <Text style={{ color: "white" }}>Google Sign In</Text>
+          <Text style={{ color: "white" }}>Find Recipes</Text>
         </Pressable>
       </View>
-      <View style={styles.button}>
-        <Pressable
-          style={{ backgroundColor: "blue", padding: 10, alignItems: "center" }}
-          onPress={() => navigation.navigate("CreateAndEditRecipes")}
-        >
-          <Text style={{ color: "white" }}>Create and Edit Recipes</Text>
-        </Pressable>
-      </View>
-      <View style={styles.button}>
-        <Pressable
-          style={{
-            backgroundColor: "green",
-            padding: 10,
-            alignItems: "center",
-          }}
-          onPress={() => navigation.navigate("CompareRecipes")}
-        >
-          <Text style={{ color: "white" }}>Compare Recipes</Text>
-        </Pressable>
-      </View>
-      <View style={styles.button}></View>
-      <Pressable
-        style={{ backgroundColor: "black", padding: 10, alignItems: "center" }}
-        onPress={() => navigation.navigate("FindRecipesPage")}
-      >
-        <Text style={{ color: "white" }}>Find Recipes</Text>
-      </Pressable>
-    </View>
+    </UserContext.Provider>
   );
 };
 

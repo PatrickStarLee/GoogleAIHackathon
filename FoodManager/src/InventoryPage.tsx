@@ -10,7 +10,7 @@ import {
   FlatList,
   Alert,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { SearchBar } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -20,6 +20,7 @@ import { RadioButton } from "react-native-paper";
 import { DatePickerInput } from "react-native-paper-dates";
 import { db } from "../Firebase/config";
 import { doc, setDoc } from "firebase/firestore";
+import { UserContext } from "./contexts/UserContext";
 
 //implement rest of functionality in this page, e.g. search, filter etc
 const InventoryPage = () => {
@@ -73,6 +74,7 @@ const InventoryPage = () => {
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [isAddFormValid, setIsAddFormValid] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const user = useContext(UserContext);
 
   const handlePress = (newChecked) => {
     setChecked(newChecked);
