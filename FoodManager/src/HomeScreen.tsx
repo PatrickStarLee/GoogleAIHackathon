@@ -28,9 +28,13 @@ import { auth } from "../Firebase/config"
 
 
 const HomeScreen = ({ navigation }) => {
+  const [userData, setUserData] = useState(null);
+
   const handleGoogle = async (e) => {
     const provider = await new GoogleAuthProvider();
-    return signInWithPopup(auth, provider)
+    const user_credentials = await signInWithPopup(auth, provider);
+    setUserData(user_credentials);
+    //console.log("XOXO",user_credentials);
   }
 
   return (
