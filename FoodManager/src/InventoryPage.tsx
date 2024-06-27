@@ -19,7 +19,7 @@ import { ModalPage } from "./Modal";
 import { RadioButton } from "react-native-paper";
 import { DatePickerInput } from "react-native-paper-dates";
 import { db } from "../Firebase/config";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { UserContext } from "./contexts/UserContext";
 
 //implement rest of functionality in this page, e.g. search, filter etc
@@ -58,7 +58,7 @@ const InventoryPage = () => {
   ];
 
   const [searchText, setSearchText] = useState("");
-  const [foodInventory, setFoodInventory] = useState(foodList); //foodInventory = foodList
+  const [foodInventory, setFoodInventory] = useState([]); //foodInventory = foodList
   const [isModalVisible, setModalVisible] = useState(false);
   const [foodName, setFoodName] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -75,6 +75,16 @@ const InventoryPage = () => {
   const [isAddFormValid, setIsAddFormValid] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const user = useContext(UserContext);
+  const [user_email, setUserEmail] = useState("foodTest");
+  //TODO: Consider blocking the user from doing anything instead of access to foodTest user?
+  
+  useEffect(() => {
+    if (user){
+      setUserEmail(user.email);
+    }
+  }, [user])
+  
+
 
   const handlePress = (newChecked) => {
     setChecked(newChecked);
@@ -157,6 +167,25 @@ const InventoryPage = () => {
   };
 
   useEffect(() => {
+    getDoc(doc(db, user_email, user_email)).then(snap => {
+      if(!snap.exists()){
+        return false;
+      }
+      let out = [];
+      const snap_data = snap.data();
+      for(const i in snap_data){
+        out[i] = snap_data[i];
+      }
+      setFoodInventory(out);
+      return true;
+    }).catch(err => {
+      console.error(err);
+      console.error(`Error ${user_email}`)
+    })
+  }, [user_email])
+  
+
+  useEffect(() => {
     let newErrors: { [key: string]: string } = {};
 
     let foundIndex = -1;
@@ -190,7 +219,7 @@ const InventoryPage = () => {
     //useEffect logic first -> editing input -> handleSubmit has the item.id from the render, thus never being passed in useEffect as an actual index or id value
     if (isFormValid) {
       setFoodInventory(foodInventory.map(item => item.id === selectedItem.id ? { ...item, name: foodName, quantity: quantity, date: inputDate.toISOString().split("T")[0] } : item))
-      setDoc(doc(db, "users", "foodTest"), {
+      setDoc(doc(db, "users", user_email), {
         foodName: foodName,
         quantity: quantity,
         dateExpired: inputDate,
@@ -236,7 +265,7 @@ const InventoryPage = () => {
     if (isAddFormValid) {
       const newFoodItem = {id: foodInventory.length.toString(), name: addFoodName, quantity: addQuantity, date: addInputDate.toISOString().split("T")[0] };
       setFoodInventory([...foodInventory, newFoodItem ])
-      setDoc(doc(db, "users", "foodTest"), {
+      setDoc(doc(db, "users", user_email), {
         foodName: addFoodName,
         quantity: addQuantity,
         dateExpired: addInputDate,
