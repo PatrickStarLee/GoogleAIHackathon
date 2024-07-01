@@ -13,7 +13,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { ModalPage } from "./Modal";
 import { RadioButton } from "react-native-paper";
 import { db } from "../Firebase/config";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, getDocsFromServer, setDoc } from "firebase/firestore";
 import { UserContext } from "./contexts/UserContext";
 import FoodModal from "./FoodModal";
 
@@ -147,27 +147,21 @@ const InventoryPage = () => {
     setFoodInventory(updatedList);
   };
 
+  //Pull the food inventory from firebase and display it
   useEffect(() => {
-    getDoc(doc(db, user_email, user_email))
-      .then((snap) => {
-        if (!snap.exists()) {
-          return false;
-        }
-        let out = [];
-        const snap_data = snap.data();
-        for (const i in snap_data) {
-          out[i] = snap_data[i];
-        }
-        setFoodInventory(out);
-        return true;
+    let x = async () => {
+      const result = await getDocs(collection(db, "users", user_email, "food_inventory"));
+      let read_inventory = []
+      result.forEach((doc) => {
+        let doc2 = doc.data();
+        read_inventory.push(doc2);
       })
-      .catch((err) => {
-        console.error(err);
-        console.error(`Error ${user_email}`);
-      });
+      setFoodInventory(read_inventory);
+    }
+    x();
   }, [user_email]);
 
-  const handleSubmit = (newItem) => {
+  const handleSubmitEditItem = (newItem) => {
     setFoodInventory(
       foodInventory.map((item) =>
         item.id === selectedItem.id
@@ -175,7 +169,8 @@ const InventoryPage = () => {
           : item
       )
     );
-    setDoc(doc(db, "users", user_email), newItem)
+    deleteDoc(doc(db, "users", user_email, "food_inventory", selectedItem.name));
+    setDoc(doc(db, "users", user_email,"food_inventory",newItem.name), newItem)
       .then(() => {
         console.log("data submitted");
       })
@@ -191,7 +186,7 @@ const InventoryPage = () => {
       ...newItem,
     };
     setFoodInventory([...foodInventory, newFoodItem]);
-    setDoc(doc(db, "users", user_email), newItem)
+    setDoc(doc(db, "users", user_email, "food_inventory", newItem.name), newItem)
       .then(() => {
         console.log("data submitted");
       })
@@ -201,11 +196,12 @@ const InventoryPage = () => {
     setAddModalVisible(false);
   };
 
-  const deleteItem = (item_id) => {
+  const deleteItem = (item_name) => {
     const updatedList = foodInventory.filter(
-      (foodItem) => foodItem.id !== item_id
+      (foodItem) => foodItem.name !== item_name
     );
     setFoodInventory(updatedList);
+    deleteDoc(doc(db, "users", user_email, "food_inventory", item_name));
   };
 
   const editModalPopUpItem = (selectedItem) => {
@@ -247,7 +243,7 @@ const InventoryPage = () => {
         <TouchableOpacity onPress={() => editModalPopUpItem(item)}>
           <Icon name="edit" size={20} color="#000" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => deleteItem(item.id)}>
+        <TouchableOpacity onPress={() => deleteItem(item.name)}>
           <Icon name="trash" size={20} color="#000" />
         </TouchableOpacity>
       </View>
@@ -337,7 +333,7 @@ const InventoryPage = () => {
       <FlatList
         data={foodInventory}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.name}
       />
 
       <View style={styles.container}>
@@ -354,7 +350,7 @@ const InventoryPage = () => {
         <FoodModal
           isVisible={isModalVisible}
           onCancel={() => setModalVisible(false)}
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitEditItem}
           selectedItem={selectedItem}
           title="Edit the item in list"
         />
