@@ -75,7 +75,7 @@ const InventoryPage = () => {
   const [isAddFormValid, setIsAddFormValid] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const user = useContext(UserContext);
-  const [user_email, setUserEmail] = useState("foodTest");
+  const [user_email, setUserEmail] = useState("test_email");
   //TODO: Consider blocking the user from doing anything instead of access to foodTest user?
   
   useEffect(() => {
@@ -215,11 +215,13 @@ const InventoryPage = () => {
     setIsFormValid(Object.keys(newErrors).length === 0);
   }, [foodName, quantity, inputDate, selectedItem]);
 
+  //handles edit item
+  //need to create new path but delete old path
   const handleSubmit = () => {
     //useEffect logic first -> editing input -> handleSubmit has the item.id from the render, thus never being passed in useEffect as an actual index or id value
     if (isFormValid) {
       setFoodInventory(foodInventory.map(item => item.id === selectedItem.id ? { ...item, name: foodName, quantity: quantity, date: inputDate.toISOString().split("T")[0] } : item))
-      setDoc(doc(db, "users", user_email), {
+      setDoc(doc(db, user_email, foodName), {
         foodName: foodName,
         quantity: quantity,
         dateExpired: inputDate,
@@ -230,7 +232,7 @@ const InventoryPage = () => {
         .catch((error) => {
           console.log(error);
         });
-      console.log("item edited successfully!");
+      // console.log("item edited successfully!");
       setFoodName("");
       setQuantity("");
       setInputDate(new Date());
@@ -261,11 +263,12 @@ const InventoryPage = () => {
     setIsAddFormValid(Object.keys(newErrors).length === 0);
   }, [addFoodName, addQuantity, addInputDate]);
 
+  //used for adding food items
   const handleSubmitAddItem = () => {
     if (isAddFormValid) {
       const newFoodItem = {id: foodInventory.length.toString(), name: addFoodName, quantity: addQuantity, date: addInputDate.toISOString().split("T")[0] };
       setFoodInventory([...foodInventory, newFoodItem ])
-      setDoc(doc(db, "users", user_email), {
+      setDoc(doc(db, user_email, addFoodName), {
         foodName: addFoodName,
         quantity: addQuantity,
         dateExpired: addInputDate,
