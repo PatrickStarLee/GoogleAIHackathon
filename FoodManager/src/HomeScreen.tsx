@@ -1,28 +1,10 @@
 import {
   View,
   StyleSheet,
-  TextInput,
   Text,
   Pressable,
-  TouchableOpacity,
-  Image,
-  Button,
-  FlatList,
 } from "react-native";
-import React, { useState } from "react";
-import { SearchBar, ListItem } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { useNavigation } from "@react-navigation/native";
-import { InventoryPage } from "./InventoryPage";
-import { ReceiptImageUpload } from "./ReceiptImageUpload";
-import { CreateAndEditRecipes } from "./CreateAndEditRecipes";
-import { CompareRecipes } from "./CompareRecipes";
-import { FindRecipesPage } from "./FindRecipesPage";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { useContext, useState } from "react";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../Firebase/config";
 import { UserContext } from "./contexts/UserContext";
@@ -31,19 +13,14 @@ import { UserContext } from "./contexts/UserContext";
 
 const HomeScreen = ({ navigation }) => {
   const [userData, setUserData] = useState(null);
-
+  const user_context = useContext(UserContext)
   const handleGoogle = async (e) => {
-    console.log("entering google auth");
     const provider = await new GoogleAuthProvider();
     const user_credentials = await signInWithPopup(auth, provider);
-    setUserData(user_credentials.user.email);
-    console.log(userData)
-    console.log("XOXO", user_credentials.user.email);
-    console.log("test");
+    user_context.setActiveUser(user_credentials.user);
   };
 
   return (
-    <UserContext.Provider value={userData || "0"}>
       <View style={styles.middle}>
         <Text> Home Screen </Text>
         <View style={styles.button}>
@@ -94,7 +71,6 @@ const HomeScreen = ({ navigation }) => {
           <Text style={{ color: "white" }}>Find Recipes</Text>
         </Pressable>
       </View>
-    </UserContext.Provider>
   );
 };
 

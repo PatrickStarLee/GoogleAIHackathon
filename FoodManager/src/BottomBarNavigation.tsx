@@ -26,12 +26,16 @@ import { ProfileScreen } from "./ProfileScreen";
 import { KitchenwareScreen } from "./KitchenwareScreen";
 import { CreateAndEditRecipes } from "./CreateAndEditRecipes";
 import { CompareRecipes } from "./CompareRecipes";
+import { UserContext } from "./contexts/UserContext";
 
 const HomeNavigation = (navigation) => {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
-
+  const [activeUser, setActiveUser] = useState(null);
+  
+  let context_val = {"activeUser": activeUser, "setActiveUser":setActiveUser};
   return (
+    <UserContext.Provider value={context_val}>
     <Tab.Navigator screenOptions={{ headerShown: false }}>
        <Tab.Screen
             name="HomeScreen"
@@ -84,6 +88,7 @@ const HomeNavigation = (navigation) => {
             }}
           />
     </Tab.Navigator>
+    </UserContext.Provider>
   );
 };
 

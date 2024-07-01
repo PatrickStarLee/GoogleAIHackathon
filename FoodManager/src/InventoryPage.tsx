@@ -63,7 +63,7 @@ const InventoryPage = () => {
 
   useEffect(() => {
     if (user) {
-      setUserEmail(user.email);
+      setUserEmail(user.activeUser.email);
     }
   }, [user]);
 
