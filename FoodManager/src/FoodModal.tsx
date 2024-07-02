@@ -5,11 +5,17 @@ import { DatePickerInput } from "react-native-paper-dates";
 import { ButtonPage } from "./Button";
 
 const FoodModal = ({ isVisible, onCancel, onSubmit, selectedItem, title }) => {
-  const [foodName, setFoodName] = useState(selectedItem ? selectedItem.name : "");
-  const [quantity, setQuantity] = useState(selectedItem ? selectedItem.quantity : "");
-  const [inputDate, setInputDate] = useState(selectedItem ? new Date(selectedItem.date) : new Date());
+  const [foodName, setFoodName] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [inputDate, setInputDate] = useState(new Date());
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    setFoodName(selectedItem ? selectedItem.name : "");
+    setQuantity(selectedItem ? selectedItem.quantity : "");
+    setInputDate(selectedItem ? new Date(selectedItem.date) : new Date());
+  }, [selectedItem])
 
   useEffect(() => {
     let newErrors: { [key: string]: string } = {};

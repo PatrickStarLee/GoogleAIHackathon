@@ -164,7 +164,7 @@ const InventoryPage = () => {
   const handleSubmitEditItem = (newItem) => {
     setFoodInventory(
       foodInventory.map((item) =>
-        item.id === selectedItem.id
+        item.name === selectedItem.name
           ? { ...item, ...newItem, date: newItem.date }
           : item
       )
