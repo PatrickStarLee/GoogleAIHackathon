@@ -10,19 +10,44 @@ import {
     FlatList,
     Alert,
   } from "react-native";
-  import React, { useState, useEffect, useContext } from "react";
-  import { SearchBar } from "react-native-elements";
-  import { Ionicons } from "@expo/vector-icons";
-  import Icon from "react-native-vector-icons/FontAwesome";
-  import {ButtonPage} from "../Button"
+import React, { useState, useEffect, useContext } from "react";
+import { SearchBar } from "react-native-elements";
+import { Ionicons } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
+import {ButtonPage} from "../Button";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../Firebase/config";
+import { UserContext } from "../contexts/UserContext";
+import { useNavigation } from '@react-navigation/native'; 
+import { HomeScreen } from "../HomeScreen";
 
   const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isFormValid, setIsAddFormValid] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const navigation = useNavigation();
+
+    const [userData, setUserData] = useState(null);
+    const user_context = useContext(UserContext)
+    const handleGoogle = async (e) => {
+      const provider = await new GoogleAuthProvider();
+      const user_credentials = await signInWithPopup(auth, provider); //check if this is null
+      console.log(user_credentials);
+      if(user_credentials && user_credentials.user)
+      {
+        user_context.setActiveUser(user_credentials.user);
+        navigation.navigate('HomeScreen');
+      }   
+    };
+
+
 
     //may not be used
+
+    //login page is the very first screen with two options to sign in, google auth and manual login
+    //then it goes to home screen
+
     useEffect(() => {
 
     }, [email, password]);
@@ -39,132 +64,73 @@ import {
       console.log("Login pressed", { email, password });
     };
     
-      return (
-        <View style={styles.container}>
-          <Text style={styles.title}>Login</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-
-          <ButtonPage title="Login" onPress={handleLoginPress} />
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Login</Text>
+  
+        <TextInput
+          style={styles.textInput}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+  
+        <TextInput
+          style={styles.textInput}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+  
+        <ButtonPage title="Login" onPress={handleLoginPress} />
+  
+        <View style={styles.buttonContainer}>
+          <Pressable
+            style={styles.googleButton}
+            onPress={handleGoogle}
+          >
+            <Text style={styles.googleButtonText}>Google Sign In</Text>
+          </Pressable>
         </View>
-      );
+      </View>
+    );
   };
 
   const styles = StyleSheet.create({
-    modal: {
-      width: "100%",
-      height: "90%",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    buttonRectangle: {
-      width: 200,
-      height: 20,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    text: {
-      fontSize: 16,
-      fontWeight: "400",
-      textAlign: "center",
-    },
     container: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      //alignItems: 'center',
-      //padding: 10,
-    },
-    searchBar: {
       flex: 1,
-      borderWidth: 0,
-      marginRight: 10,
-      paddingLeft: 10,
-    },
-    button: {
-      flexDirection: "row",
-      flex: 1,
-      justifyContent: "center",
-    },
-    separator: {
-      marginVertical: 30,
-      height: 1,
-      width: "80%",
-    },
-    input: {
-      paddingTop: 10,
-      borderColor: "grey",
-      borderBottomWidth: 2,
-    },
-    pop_up_container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 20,
     },
     title: {
-      fontSize: 20,
-      fontWeight: "bold",
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 20,
     },
-    closeButton2: {
-      position: "absolute",
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
+    textInput: {
+      width: '100%',
+      padding: 10,
+      borderColor: 'grey',
+      borderBottomWidth: 2,
+      marginBottom: 20,
     },
-    radioButton: {
-      flexDirection: "row",
-      alignItems: "center",
+    buttonContainer: {
+      width: '100%',
+      alignItems: 'center',
     },
-    radioLabel: {
-      marginLeft: 8,
-      fontSize: 16,
-      color: "#333",
+    googleButton: {
+      backgroundColor: 'red',
+      padding: 10,
+      alignItems: 'center',
+      borderRadius: 5,
     },
-    closeButton: {
-      alignSelf: "flex-end",
-      marginRight: "2%",
-      marginTop: "2%",
-      backgroundColor: "#ccc",
-      borderRadius: 20,
-      width: "10%",
-      height: "5%",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    customButton: {
-      backgroundColor: "blue",
-      marginTop: 15,
-      paddingVertical: 15,
-      borderRadius: 25,
-      width: "80%",
-      alignItems: "center",
-    },
-    customText: {
-      color: "white",
-      fontWeight: "700",
-      fontSize: 18,
-    },
-    addButton: {
-      flexDirection: "row",
-      backgroundColor: "red",
-      width: "100%",
-      height: "100%",
-      justifyContent: "center",
-      alignItems: "center",
+    googleButtonText: {
+      color: 'white',
+      fontWeight: 'bold',
     },
   });
 
