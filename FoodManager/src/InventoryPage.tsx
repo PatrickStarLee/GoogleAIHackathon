@@ -14,7 +14,7 @@ import { ModalPage } from "./Modal";
 import { RadioButton } from "react-native-paper";
 import { db } from "../Firebase/config";
 import { collection, deleteDoc, doc, getDoc, getDocs, getDocsFromServer, setDoc } from "firebase/firestore";
-import { UserContext } from "./contexts/UserContext";
+import { UserContext} from "./contexts/UserContext";
 import FoodModal from "./FoodModal";
 
 const InventoryPage = () => {
@@ -59,10 +59,10 @@ const InventoryPage = () => {
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const user = useContext(UserContext);
-  const [user_email, setUserEmail] = useState("foodTest");
+  const [user_email, setUserEmail] = useState("");
 
   useEffect(() => {
-    if (user) {
+    if (user && user.activeUser) {
       setUserEmail(user.activeUser.email);
     }
   }, [user]);

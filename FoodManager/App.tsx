@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 //import { AddData } from './src/addData';
-import { InventoryPage } from './src/InventoryPage';
 import {
   View,
   StyleSheet,
@@ -19,24 +18,18 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-//import { HomeScreen } from "./src/HomeScreen";
-import { KitchenwareScreen } from "./src/KitchenwareScreen";
-import { ProfileScreen } from "./src/ProfileScreen";
-import { ReceiptImageUpload } from './src/ReceiptImageUpload';
 import { Dimensions } from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { LoginPage } from './src/Pages/LoginPage';
+import { UserContext } from './src/contexts/UserContext';
 import { FindRecipesPage } from './src/FindRecipesPage';
-import { HomeNavigation } from './src/BottomBarNavigation';
-import { HomeScreen } from './src/HomeScreen';
 import { CreateAndEditRecipes } from './src/CreateAndEditRecipes';
-import { CompareRecipes } from "./src/CompareRecipes";
-
-
-
+import { CompareRecipes } from './src/CompareRecipes';
+import { TabNavigation } from './src/TabNavigation';
 
 export default function App() {
+  const [activeUser, setActiveUser] = useState(null);
 
-  const Tab = createBottomTabNavigator();
   const Stack = createNativeStackNavigator();
 
   const getTabBarLabel = (route) => {
@@ -54,13 +47,16 @@ export default function App() {
     }
   };
 
+  let context_val = {"activeUser": activeUser, "setActiveUser":setActiveUser};
+
   return (
-    <View style={styles.container}>
+    <UserContext.Provider value={context_val}>
+      <View style={styles.container}>
       <NavigationContainer>
-        <Stack.Navigator> 
+        <Stack.Navigator initialRouteName='LoginPage'> 
           <Stack.Screen 
-            name="Home" 
-            component={HomeNavigation} /*Home Navigation should really be called BottomBarNavigation but code was shifted around */
+            name="HomeScreen" 
+            component={TabNavigation} 
             options={({ route }) => ({
               headerTitle: getTabBarLabel(route)
             })}
@@ -68,9 +64,11 @@ export default function App() {
           <Stack.Screen name="CreateAndEditRecipes" component={CreateAndEditRecipes} />
           <Stack.Screen name="CompareRecipes" component={CompareRecipes} />
           <Stack.Screen name="FindRecipesPage" component={FindRecipesPage} />
+          <Stack.Screen name="LoginPage" component={LoginPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>
+    </UserContext.Provider>
   );
 }
 
