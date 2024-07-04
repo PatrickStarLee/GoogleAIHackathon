@@ -41,7 +41,6 @@ const TabNavigation = (navigation) => {
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="home" color={color} size={size} />
               ),
-              headerLeft: () => null
             }}
           />
         <Tab.Screen
