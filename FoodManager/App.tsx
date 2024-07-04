@@ -58,7 +58,8 @@ export default function App() {
             name="HomeScreen" 
             component={TabNavigation} 
             options={({ route }) => ({
-              headerTitle: getTabBarLabel(route)
+              headerTitle: getTabBarLabel(route),
+              headerLeft: null
             })}
           />
           <Stack.Screen name="CreateAndEditRecipes" component={CreateAndEditRecipes} />
