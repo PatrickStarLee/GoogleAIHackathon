@@ -32,6 +32,8 @@ const FoodModal = ({ isVisible, onCancel, onSubmit, selectedItem, title }) => {
       newErrors.quantity = "Quantity cannot be blank!";
     } else if (!Number.isInteger(Number(quantity))) {
       newErrors.quantity = "Quantity must be a number";
+    } else if(parseInt(quantity, 10) <=0 ) {
+      newErrors.quantity = "The quantity cannot be less than or equal to 0!";
     }
 
     setErrors(newErrors);

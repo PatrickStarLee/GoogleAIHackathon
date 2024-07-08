@@ -52,7 +52,7 @@ const KitchenwareScreen = () => {
   ];
 
   const [searchText, setSearchText] = useState("");
-  const [kitchenWareInventory, setKitchenWareInventory] = useState(kitchenWareList); //kitchenWareInventory = foodList
+  const [kitchenWareInventory, setKitchenWareInventory] = useState(kitchenWareList); 
   const [isModalVisible, setModalVisible] = useState(false);
   const [kitchenWareItemName, setKitchenWareItemName] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -159,6 +159,8 @@ const KitchenwareScreen = () => {
       newErrors.quantity = "Quantity cannot be blank!";
     } else if (!Number.isInteger(Number(quantity))) {
       newErrors.quantity = "Quantity must be a number";
+    } else if(parseInt(quantity, 10) <=0 ) {
+      newErrors.quantity = "The quantity cannot be less than or equal to 0!";
     }
 
     setErrors(newErrors);
@@ -203,6 +205,8 @@ const KitchenwareScreen = () => {
       newErrors.quantity = "Quantity cannot be blank!";
     } else if (!Number.isInteger(Number(addQuantity))) {
       newErrors.quantity = "Quantity must be a number";
+    } else if(parseInt(addQuantity, 10) <=0 ) {
+      newErrors.quantity = "The quantity cannot be less than or equal to 0!";
     }
 
     setAddErrors(newErrors);
@@ -242,10 +246,12 @@ const KitchenwareScreen = () => {
     setKitchenWareInventory(updatedList);
   };
 
+  //function to set the modal to not be visible when canceling
   const handleCancel = () => {
     setModalVisible(false);
   };
 
+  //when item is selected, it set the values in the use state and then reset
   const editModalPopUpItem = (selectedItem) => {
     setSelectedItem(selectedItem);
     setKitchenWareItemName(kitchenWareItemName);

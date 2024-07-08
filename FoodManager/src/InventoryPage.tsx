@@ -149,16 +149,25 @@ const InventoryPage = () => {
 
   //Pull the food inventory from firebase and display it
   useEffect(() => {
-    let x = async () => {
-      const result = await getDocs(collection(db, "users", user_email, "food_inventory"));
-      let read_inventory = []
-      result.forEach((doc) => {
-        let doc2 = doc.data();
-        read_inventory.push(doc2);
-      })
-      setFoodInventory(read_inventory);
-    }
-    x();
+    const fetchInventory = async () => {
+      try {
+        const userDocRef = doc(db, "users", user_email); // Reference to the user document
+        const inventoryCollectionRef = collection(userDocRef, "food_inventory"); // Reference to the food_inventory subcollection
+  
+        const result = await getDocs(inventoryCollectionRef);
+        let read_inventory = [];
+        result.forEach((doc) => {
+          let docData = doc.data();
+          read_inventory.push(docData);
+        });
+  
+        setFoodInventory(read_inventory);
+      } catch (error) {
+        console.error("Error fetching inventory: ", error);
+      }
+    };
+  
+    fetchInventory();
   }, [user_email]);
 
   const handleSubmitEditItem = (newItem) => {
