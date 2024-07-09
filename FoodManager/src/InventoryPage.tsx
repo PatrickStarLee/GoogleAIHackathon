@@ -13,44 +13,19 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { ModalPage } from "./Modal";
 import { RadioButton } from "react-native-paper";
 import { db } from "../Firebase/config";
-import { collection, deleteDoc, doc, getDoc, getDocs, getDocsFromServer, setDoc } from "firebase/firestore";
-import { UserContext} from "./contexts/UserContext";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  getDocsFromServer,
+  setDoc,
+} from "firebase/firestore";
+import { UserContext } from "./contexts/UserContext";
 import FoodModal from "./FoodModal";
 
 const InventoryPage = () => {
-  const foodList = [
-    {
-      id: "1",
-      name: "Banana",
-      quantity: "23",
-      date: "2024-02-23",
-    },
-    {
-      id: "2",
-      name: "Orange",
-      quantity: "12",
-      date: "2024-01-01",
-    },
-    {
-      id: "3",
-      name: "Ice Cream",
-      quantity: "5",
-      date: "2024-03-15",
-    },
-    {
-      id: "4",
-      name: "Spaghetti",
-      quantity: "7",
-      date: "2024-04-01",
-    },
-    {
-      id: "5",
-      name: "Pineapple",
-      quantity: "1",
-      date: "2023-12-31",
-    },
-  ];
-
   const [searchText, setSearchText] = useState("");
   const [foodInventory, setFoodInventory] = useState([]); //foodInventory = foodList
   const [isModalVisible, setModalVisible] = useState(false);
@@ -150,14 +125,16 @@ const InventoryPage = () => {
   //Pull the food inventory from firebase and display it
   useEffect(() => {
     let x = async () => {
-      const result = await getDocs(collection(db, "users", user_email, "food_inventory"));
-      let read_inventory = []
+      const result = await getDocs(
+        collection(db, "users", user_email, "food_inventory")
+      );
+      let read_inventory = [];
       result.forEach((doc) => {
         let doc2 = doc.data();
         read_inventory.push(doc2);
-      })
+      });
       setFoodInventory(read_inventory);
-    }
+    };
     x();
   }, [user_email]);
 
@@ -169,8 +146,13 @@ const InventoryPage = () => {
           : item
       )
     );
-    deleteDoc(doc(db, "users", user_email, "food_inventory", selectedItem.name));
-    setDoc(doc(db, "users", user_email,"food_inventory",newItem.name), newItem)
+    deleteDoc(
+      doc(db, "users", user_email, "food_inventory", selectedItem.name)
+    );
+    setDoc(
+      doc(db, "users", user_email, "food_inventory", newItem.name),
+      newItem
+    )
       .then(() => {
         console.log("data submitted");
       })
@@ -186,7 +168,10 @@ const InventoryPage = () => {
       ...newItem,
     };
     setFoodInventory([...foodInventory, newFoodItem]);
-    setDoc(doc(db, "users", user_email, "food_inventory", newItem.name), newItem)
+    setDoc(
+      doc(db, "users", user_email, "food_inventory", newItem.name),
+      newItem
+    )
       .then(() => {
         console.log("data submitted");
       })
@@ -260,7 +245,21 @@ const InventoryPage = () => {
             value={searchText}
             inputContainerStyle={{ width: "100%" }}
             platform={"default"}
-            showCancel={true} onBlur={undefined} onChangeText={undefined} onFocus={undefined} clearIcon={undefined} searchIcon={undefined} loadingProps={undefined} showLoading={false} onClear={undefined} onCancel={undefined} lightTheme={false} round={false} cancelButtonTitle={""} cancelButtonProps={undefined}          />
+            showCancel={true}
+            onBlur={undefined}
+            onChangeText={undefined}
+            onFocus={undefined}
+            clearIcon={undefined}
+            searchIcon={undefined}
+            loadingProps={undefined}
+            showLoading={false}
+            onClear={undefined}
+            onCancel={undefined}
+            lightTheme={false}
+            round={false}
+            cancelButtonTitle={""}
+            cancelButtonProps={undefined}
+          />
         </View>
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
