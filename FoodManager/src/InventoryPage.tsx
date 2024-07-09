@@ -151,6 +151,9 @@ const InventoryPage = () => {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
+        if(!user_email){
+          return;
+        }
         const userDocRef = doc(db, "users", user_email); // Reference to the user document
         const inventoryCollectionRef = collection(userDocRef, "food_inventory"); // Reference to the food_inventory subcollection
   
