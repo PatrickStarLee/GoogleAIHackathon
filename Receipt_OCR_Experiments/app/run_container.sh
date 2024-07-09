@@ -1,0 +1,1 @@
+docker container run -p 1738:5000 llm_ocr:latest
