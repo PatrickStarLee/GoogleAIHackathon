@@ -41,23 +41,29 @@ const ReceiptImageUpload= () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!');
+          return;
         }
       }
-  
+    
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       });
-  
-      console.log(result);
-  
-      if (!result.canceled) {
-        //setImage(result.uri);
-      }
+    
+      const base64Image = result.assets[0];
+    
+      fetch('http://googleaihackathon-346y5xs74q-wl.a.run.app/upload', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ image: base64Image })
+      })
+      .then(response => response.json())
     };
-
+    
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Button title="Pick an image from camera roll" onPress={pickImage} />
